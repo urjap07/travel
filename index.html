@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Travel Group</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+    
+    <!-- 
+      SCRIPT LOADING ORDER:
+      1. React & React DOM (core library)
+      2. React Router (depends on React)
+      3. Framer Motion (depends on React)
+      4. Tailwind (styling)
+      5. Your app's code (in <body>, depends on all of the above)
+    -->
+    
+    <!-- React & React DOM -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    
+    <!-- React Router v6 (UMD build) -->
+    <script src="https://unpkg.com/react-router-dom@6.23.1/dist/umd/react-router-dom.development.js"></script>
+    
+    <!-- Framer Motion (UMD build) -->
+    <script src="https://unpkg.com/framer-motion@11.2.10/dist/framer-motion.dev.js"></script>
+    
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Config (must come AFTER the main script) -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#00AFAA",
+              secondary: "#FF7A59",
+              accent: "#F4C542",
+              background: "#F8FDFD",
+              text: "#1A1A1A"
+            },
+            fontFamily: {
+              heading: ["Poppins", "Arial", "sans-serif"],
+              body: ["Inter", "Arial", "sans-serif"],
+            }
+          }
+        }
+      }
+    </script>
+    
+  </head>
+  <body>
+    <div id="root"></div>
+    <!-- Your app's main script -->
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
