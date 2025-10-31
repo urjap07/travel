@@ -16,7 +16,7 @@ export interface Package {
       duration: '4D/3N',
       region: 'India',
       price: '25,000/-',
-      imageUrl: 'https://placehold.co/600x400/00AFAA/FFFFFF?text=Goa+Vibes',
+      imageUrl: '/Goa_image.jpg',
     },
     {
       id: 2,
@@ -24,7 +24,7 @@ export interface Package {
       duration: '5D/4N',
       region: 'India',
       price: '40,000/-',
-      imageUrl: 'https://placehold.co/600x400/FF7A59/FFFFFF?text=Manali+Snow',
+      imageUrl: '/Manali_image.jpg',
     },
     {
       id: 3,
@@ -32,7 +32,7 @@ export interface Package {
       duration: '7D/6N',
       region: 'Europe',
       price: '90,000/-',
-      imageUrl: 'https://placehold.co/600x400/F4C542/333333?text=Paris+%26+Swiss',
+      imageUrl: '/Paris_Switzerland_image.jpg',
     },
     {
       id: 4,
@@ -40,7 +40,7 @@ export interface Package {
       duration: '6D/5N',
       region: 'Asia',
       price: '35,000/-',
-      imageUrl: 'https://placehold.co/600x400/00AFAA/FFFFFF?text=Bali+Holiday',
+      imageUrl: '/Bali_image.jpg',
     },
     {
       id: 5,
@@ -48,7 +48,7 @@ export interface Package {
       duration: '5D/4N',
       region: 'Middle East',
       price: '65,000/-',
-      imageUrl: 'https://placehold.co/600x400/FF7A59/FFFFFF?text=Dubai+Luxury',
+      imageUrl: '/Dubai_image.jpg',
     },
     {
       id: 6,
@@ -56,7 +56,7 @@ export interface Package {
       duration: '5D/4N',
       region: 'Asia',
       price: '30,000/-',
-      imageUrl: 'https://placehold.co/600x400/F4C542/333333?text=Thailand+Fun',
+      imageUrl: '/Thailand_image.jpg',
     },
   ];
   
