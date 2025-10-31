@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, type Variants } from 'framer-motion';
 
 // --- DATA IMPORTS ---
-// FIXED: Removed .tsx extensions and the failing type import
 import { dummyPackages } from '../data/dummyPackages'; 
-import { packageDetails } from '../data/PackageDetails'; // Corrected path
+import { packageDetails } from '../data/PackageDetails';
 
-// --- NEW: Local Interface Definitions ---
-// We define the types here to avoid all import errors.
+// --- LOCAL TYPES ---
 export interface Package {
   id: number;
   name: string;
@@ -18,7 +16,6 @@ export interface Package {
   imageUrl: string;
 }
 
-// This is the type for the detailed data
 export interface PackageDetailType {
   id: number;
   description: string;
@@ -29,27 +26,28 @@ export interface PackageDetailType {
   testimonials: { name: string; quote: string; }[];
 }
 
-// --- HELPER ICONS ---
+// --- ICONS ---
 const CalendarIcon = () => (
-  <svg className="w-5 h-5 mr-2 inline-block text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <svg className="w-5 h-5 mr-2 inline-block text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
   </svg>
 );
 
 const CheckIcon = () => (
-  <svg className="w-6 h-6 mr-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <svg className="w-6 h-6 mr-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
   </svg>
 );
 
 const XIcon = () => (
-  <svg className="w-6 h-6 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <svg className="w-6 h-6 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
   </svg>
 );
 
 // --- ANIMATION VARIANTS ---
-const pageVariants = {
+// Typed with Variants to satisfy TypeScript and Framer Motion typings.
+const pageVariants: Variants = {
   hidden: { opacity: 0 },
   visible: { 
     opacity: 1,
@@ -57,7 +55,7 @@ const pageVariants = {
   },
 };
 
-const sectionVariants = {
+const sectionVariants: Variants = {
   hidden: { opacity: 0, y: 30 },
   visible: { 
     opacity: 1, 
@@ -66,19 +64,13 @@ const sectionVariants = {
   },
 };
 
-// --- PACKAGE DETAIL PAGE ---
+// --- COMPONENT ---
 const PackageDetail = () => {
-  // 1. Get the 'id' from the URL
   const { id } = useParams<{ id: string }>();
-  
-  // 2. State to hold our package data
   const [pkg, setPkg] = useState<Package | null>(null);
-  // FIXED: Use the locally defined 'PackageDetailType' here
   const [details, setDetails] = useState<PackageDetailType | null>(null);
 
-  // 3. Find the matching package data when the component loads
   useEffect(() => {
-    // Scroll to top on page load
     window.scrollTo(0, 0);
     
     const packageId = Number(id);
@@ -89,9 +81,8 @@ const PackageDetail = () => {
       setPkg(foundPkg || null);
       setDetails(foundDetails || null);
     }
-  }, [id]); // Re-run this effect if the ID in the URL changes
+  }, [id]);
 
-  // 4. Loading state
   if (!pkg || !details) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-background">
@@ -100,7 +91,6 @@ const PackageDetail = () => {
     );
   }
 
-  // 5. Render the page
   return (
     <motion.div 
       className="bg-background font-body"
@@ -108,12 +98,12 @@ const PackageDetail = () => {
       initial="hidden"
       animate="visible"
     >
-      {/* --- Hero Section --- */}
+      {/* Hero Section */}
       <section 
         className="h-[50vh] min-h-[300px] bg-cover bg-center flex items-center justify-center text-white text-center px-6 relative"
         style={{ backgroundImage: `url(${pkg.imageUrl})` }}
       >
-        <div className="absolute inset-0 bg-black/50 z-0" /> {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/50 z-0" />
         <motion.div 
           className="relative z-10"
           initial={{ opacity: 0, y: 20 }}
@@ -127,7 +117,7 @@ const PackageDetail = () => {
         </motion.div>
       </section>
 
-      {/* --- Floating Enquire Button --- */}
+      {/* Enquire Button */}
       <div className="sticky top-[100px] z-30 flex justify-center md:justify-end pr-0 md:pr-12 -mt-8">
         <Link to="/enquiry">
           <motion.button 
@@ -142,24 +132,23 @@ const PackageDetail = () => {
         </Link>
       </div>
 
-      {/* --- Main Content Grid --- */}
+      {/* Main Content */}
       <div className="container mx-auto max-w-7xl p-6 lg:p-12 mt-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           
-          {/* --- Left Column (Itinerary & Details) --- */}
+          {/* Left Column */}
           <motion.div 
             className="lg:col-span-2"
             variants={sectionVariants}
             initial="hidden"
-            animate="visible"
+            whileInView="visible"
+            viewport={{ amount: 0.2 }}
           >
-            {/* Description */}
             <motion.div variants={sectionVariants} className="mb-12">
               <h2 className="text-4xl font-heading font-bold text-text mb-4">About this Trip</h2>
               <p className="text-lg text-gray-600 leading-relaxed">{details.description}</p>
             </motion.div>
 
-            {/* Itinerary */}
             <motion.div variants={sectionVariants} className="mb-12">
               <h2 className="text-4xl font-heading font-bold text-text mb-6">Your Day-by-Day Itinerary</h2>
               <div className="space-y-6">
@@ -167,7 +156,7 @@ const PackageDetail = () => {
                   <motion.div 
                     key={day.day}
                     className="p-6 bg-white rounded-xl shadow-md"
-                    variants={sectionVariants} // Staggered children
+                    variants={sectionVariants} // child variant works with parent staggerChildren
                   >
                     <h3 className="text-2xl font-heading font-semibold text-primary mb-2">Day {day.day}: {day.title}</h3>
                     <p className="text-gray-600">{day.details}</p>
@@ -176,7 +165,6 @@ const PackageDetail = () => {
               </div>
             </motion.div>
             
-            {/* Gallery */}
             <motion.div variants={sectionVariants} className="mb-12">
               <h2 className="text-4xl font-heading font-bold text-text mb-6">Gallery</h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -194,7 +182,7 @@ const PackageDetail = () => {
 
           </motion.div>
 
-          {/* --- Right Column (Inclusions, Exclusions, Price) --- */}
+          {/* Right Column */}
           <motion.div 
             className="lg:col-span-1 relative"
             initial={{ opacity: 0, x: 50 }}
