@@ -112,10 +112,10 @@ export const packageDetails: PackageDetailType[] = [
     inclusions: ['Accommodation in cozy hotel', 'Daily Breakfast & Dinner', 'All transfers by private car', 'Sightseeing as per itinerary'],
     exclusions: ['Bus/Flight tickets', 'Lunch', 'Adventure activity costs', 'Rohtang Pass permit'],
     gallery: [
-      { url: 'https://placehold.co/300x200/00AFAA/FFFFFF?text=Solang+Valley', title: 'Solang Valley' },
-      { url: 'https://placehold.co/300x200/00AFAA/FFFFFF?text=Hadimba+Temple', title: 'Hadimba Temple' },
-      { url: 'https://placehold.co/300x200/00AFAA/FFFFFF?text=Kullu+Valley', title: 'Kullu Valley' },
-      { url: 'https://placehold.co/300x200/00AFAA/FFFFFF?text=Rohtang+Pass', title: 'Rohtang Pass' },
+      { url: '/Manali_image1.jpg', title: 'Solang Valley' },
+      { url: '/Manali_image2.jpg', title: 'Hadimba Temple' },
+      { url: '/Manali_image3.jpg', title: 'Kullu Valley' },
+      { url: '/Manali_image4.jpg', title: 'Rohtang Pass' },
     ],
     testimonials: [
       { name: 'Ankit Sharma', quote: 'Solang Valley was the highlight. Amazing trip, well managed by the team.' }
