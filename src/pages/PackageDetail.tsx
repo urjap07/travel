@@ -137,10 +137,10 @@ export const packageDetails: PackageDetailType[] = [
     inclusions: ['Accommodation in 4-star hotels', 'Daily Breakfast', 'Train tickets (Paris-Interlaken, Interlaken-Lucerne)', 'All sightseeing and excursions as mentioned', 'Swiss Travel Pass (for inter-city travel)'],
     exclusions: ['International flights', 'Visa fees', 'Lunches & Dinners', 'Personal expenses'],
     gallery: [
-      { url: 'https://placehold.co/300x200/4F46E5/FFFFFF?text=Eiffel+Tower', title: 'Eiffel Tower' },
-      { url: 'https://placehold.co/300x200/4F46E5/FFFFFF?text=Jungfraujoch', title: 'Jungfraujoch' },
-      { url: 'https://placehold.co/300x200/4F46E5/FFFFFF?text=Lake+Lucerne', title: 'Lake Lucerne' },
-      { url: 'https://placehold.co/300x200/4F46E5/FFFFFF?text=Mt+Titlis', title: 'Mt Titlis' },
+      { url: '/Paris_image1.jpg', title: 'Eiffel Tower' },
+      { url: '/Paris_Switzerland_image1.jpg', title: 'Jungfraujoch' },
+      { url: '/Paris_Switzerland_image2.jpg', title: 'Lake Lucerne' },
+      { url: '/Paris_Switzerland_image3.jpg', title: 'Mt Titlis' },
     ],
     testimonials: [
       { name: 'The Kapoors', quote: 'Unforgettable trip! From the romance of Paris to the beauty of the Alps, everything was perfect.' }
@@ -161,10 +161,10 @@ export const packageDetails: PackageDetailType[] = [
     inclusions: ['Accommodation (Kuta & Ubud)', 'Daily Breakfast', 'Airport Transfers', 'All tours by private car', 'Nusa Penida fast boat & tour', '1x Balinese Massage'],
     exclusions: ['International flights', 'Lunches & Dinners', 'Water sports fees', 'Visa on Arrival'],
     gallery: [
-      { url: 'https://placehold.co/300x200/F4C542/FFFFFF?text=Kelingking+Beach', title: 'Kelingking Beach' },
-      { url: 'https://placehold.co/300x200/F4C542/FFFFFF?text=Tanah+Lot', title: 'Tanah Lot' },
-      { url: 'https://placehold.co/300x200/F4C542/FFFFFF?text=Ubud+Rice+Terrace', title: 'Ubud Rice Terrace' },
-      { url: 'https://placehold.co/300x200/F4C542/FFFFFF?text=Ulun+Danu+Temple', title: 'Ulun Danu Temple' },
+      { url: '/Bali_image1.jpg', title: 'Kelingking Beach' },
+      { url: '/Bali_image2.jpg', title: 'Tanah Lot' },
+      { url: '/Bali_image3.jpg', title: 'Ubud Rice Terrace' },
+      { url: '/Bali_image4.jpg', title: 'Ulun Danu Temple' },
     ],
     testimonials: [
       { name: 'Vikram & Aisha', quote: 'Bali was magical. The private tours were excellent, and Nusa Penida was unbelievable.' }
@@ -184,10 +184,10 @@ export const packageDetails: PackageDetailType[] = [
     inclusions: ['4-star hotel accommodation', 'Daily Breakfast', 'Airport Transfers', 'Burj Khalifa ticket', 'Desert Safari with Dinner', 'Dhow Cruise Dinner', 'Abu Dhabi city tour'],
     exclusions: ['International flights', 'Visa fees', 'Lunches', 'Tourism Dirham Tax (paid at hotel)'],
     gallery: [
-      { url: 'https://placehold.co/300x200/E879F9/FFFFFF?text=Burj+Khalifa', title: 'Burj Khalifa' },
-      { url: 'https://placehold.co/300x200/E879F9/FFFFFF?text=Desert+Safari', title: 'Desert Safari' },
-      { url: 'https://placehold.co/300x200/E879F9/FFFFFF?text=Sheikh+Zayed+Mosque', title: 'Sheikh Zayed Mosque' },
-      { url: 'https://placehold.co/300x200/E879F9/FFFFFF?text=Dubai+Marina', title: 'Dubai Marina' },
+      { url: '/Dubai_image1.jpg', title: 'Burj Khalifa' },
+      { url: '/Dubai_image2.jpg', title: 'Desert Safari' },
+      { url: '/Dubai_image3.jpg', title: 'Sheikh Zayed Mosque' },
+      { url: '/Dubai_image4.jpg', title: 'Dubai Marina' },
     ],
     testimonials: [
       { name: 'Mr. & Mrs. Gupta', quote: 'Dubai was spectacular! The desert safari and Burj Khalifa were experiences of a lifetime.' }
@@ -207,10 +207,10 @@ export const packageDetails: PackageDetailType[] = [
     inclusions: ['Accommodation (Pattaya & Bangkok)', 'Daily Breakfast', 'All transfers', 'Coral Island Tour', 'Bangkok Temple Tour', 'Safari World ticket with Lunch'],
     exclusions: ['International flights', 'Visa on Arrival fees', 'Lunches & Dinners (except one)', 'Personal expenses'],
     gallery: [
-      { url: 'https://placehold.co/300x200/FB923C/FFFFFF?text=Coral+Island', title: 'Coral Island' },
-      { url: 'https://placehold.co/300x200/FB923C/FFFFFF?text=Grand+Palace+(Bangkok)', title: 'Grand Palace' },
-      { url: 'https://placehold.co/300x200/FB923C/FFFFFF?text=Safari+World', title: 'Safari World' },
-      { url: 'https://placehold.co/300x200/FB923C/FFFFFF?text=Floating+Market', title: 'Floating Market' },
+      { url: '/Thailand_image1.jpg', title: 'Coral Island' },
+      { url: '/Thailand_image2.jpg', title: 'Grand Palace' },
+      { url: '/Thailand_image3.jpg', title: 'Safari World' },
+      { url: '/Thailand_image4.jpg', title: 'Floating Market' },
     ],
     testimonials: [
       { name: 'College Friends Group', quote: 'Amazing and affordable. Coral Island was beautiful and Safari World was so much fun!' }
