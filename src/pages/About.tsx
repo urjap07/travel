@@ -281,7 +281,7 @@ const About = () => {
             className="text-lg text-gray-700 leading-relaxed mb-6"
             variants={itemVariants}
           >
-            Founded in [Year] by a team of passionate explorers, The Travel Group was born from a simple idea: travel should be extraordinary, accessible, and completely hassle-free. We were tired of cookie-cutter tours and impersonal service. We believed we could do better.
+            Founded in 2020 by a team of passionate explorers, The Travel Group was born from a simple idea: travel should be extraordinary, accessible, and completely hassle-free. We were tired of cookie-cutter tours and impersonal service. We believed we could do better.
           </motion.p>
           <motion.p 
             className="text-lg text-gray-700 leading-relaxed"
