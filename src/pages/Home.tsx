@@ -1,52 +1,99 @@
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import React from 'react';
+// Note: This requires 'react-router-dom' to be installed and configured in your project.
+// We are using <a href=""> for this single-file demo.
+// import { Link } from 'react-router-dom'; 
+import { motion, type Variants } from 'framer-motion';
+import PackageCard from '../components/PackageCard';
+import { dummyPackages } from '../data/dummyPackages';
 
-// --- IMPORTS ---
-// FIXED: Using explicit file extensions and paths to resolve build issues
-// These must match your local file names exactly.
-import { dummyPackages } from '../data/dummyPackages.tsx';
-import PackageCard from '../components/PackageCard.tsx';
-
-// --- HELPER ICONS ---
+// --- HELPER ICONS (FIXED) ---
 const TicketIcon = () => (
-  <svg className="w-12 h-12 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    width="24" 
+    height="24" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    className="w-12 h-12 text-secondary"
+  >
+    <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/>
+    <path d="M13 5v2"/>
+    <path d="M13 17v2"/>
+    <path d="M13 11v2"/>
   </svg>
 );
 
+// MODIFIED: New SVG for Local Experiences (Map Pin)
 const GlobeIcon = () => (
-  <svg className="w-12 h-12 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2h10a2 2 0 002-2v-1a2 2 0 012-2h1.945M7.721 19h8.558M12 5.093A9.48 9.48 0 003.58 10.042m.01 0a15.93 15.93 0 0116.82 0M12 21a9.48 9.48 0 008.42-4.958m-.01 0a15.93 15.93 0 00-16.82 0" />
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    width="24" 
+    height="24" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    className="w-12 h-12 text-secondary"
+  >
+    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+    <circle cx="12" cy="10" r="3" />
   </svg>
 );
 
+// MODIFIED: Replaced broken icon with a new "Sliders" icon for "Custom Trips"
 const SparklesIcon = () => (
-  <svg className="w-12 h-12 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m1-9l2.293 2.293a1 1 0 010 1.414L11 15m6-6l-2.293 2.293a1 1 0 000 1.414L17 15m-4-8v2m0 4v2m0 4v2M5 3l14 18" />
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    width="24" 
+    height="24" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    className="w-12 h-12 text-secondary"
+  >
+    <line x1="4" x2="4" y1="21" y2="14" />
+    <line x1="4" x2="4" y1="10" y2="3" />
+    <line x1="12" x2="12" y1="21" y2="12" />
+    <line x1="12" x2="12" y1="8" y2="3" />
+    <line x1="20" x2="20" y1="21" y2="16" />
+    <line x1="20" x2="20" y1="12" y2="3" />
+    <line x1="2" x2="6" y1="14" y2="14" />
+    <line x1="10" x2="14" y1="8" y2="8" />
+    <line x1="18" x2="22" y1="16" y2="16" />
   </svg>
 );
+
 
 // --- ANIMATION VARIANTS ---
-const sectionVariants = {
+// ... (code unchanged)
+const sectionVariants: Variants = {
   hidden: { opacity: 0, y: 50 },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
       duration: 0.6,
-      ease: "easeOut"
+      ease: "easeOut" as any
     }
   }
 };
 
-const gradientVariants = {
+const gradientVariants: Variants = {
   animate: {
     backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
     transition: {
       duration: 15,
-      ease: "linear",
+      ease: "linear" as any, // FIXED
       repeat: Infinity,
-      repeatType: "loop",
     },
   },
 };
@@ -61,13 +108,16 @@ const Home = () => {
         {/* Animated Gradient Background - Subtle */}
         <motion.div 
           className="absolute inset-0 z-0"
-          initial={gradientVariants.animate as any}
-          animate={gradientVariants.animate as any} // Start the animation immediately
+          variants={gradientVariants}
+          initial="animate" // Start the animation immediately
+          animate="animate"
+          // FIXED: Cast style to React.CSSProperties to allow CSS custom properties
           style={{
-            // Avoid using CSS custom properties ("--tw-...") in inline styles for TSX type-safety.
-            // Provide the gradient directly so TypeScript accepts the style object.
-            background: 'linear-gradient(90deg, rgba(102,184,182,1) 0%, rgba(255,173,161,1) 100%)',
-            backgroundSize: '200% 200%', // Makes the gradient larger than the container to allow animation
+            background: 'linear-gradient(to right, var(--tw-gradient-stops))',
+            '--tw-gradient-stops': 'var(--tw-gradient-from) 0%, var(--tw-gradient-to) 100%',
+            '--tw-gradient-from': 'rgba(102, 184, 182, 1.0)', // Light Teal/Green (#66B8B6)
+            '--tw-gradient-to': 'rgba(255, 173, 161, 1.0)', // Light Coral (#FFADA1)
+            backgroundSize: '200% 200%',
           } as React.CSSProperties}
         />
 
@@ -76,13 +126,13 @@ const Home = () => {
           className="relative z-10"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          transition={{ duration: 0.8, ease: "easeOut" as any }} // FIXED
         >
           <motion.h1 
             className="text-5xl md:text-7xl font-heading font-bold mb-4 drop-shadow-lg"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" as any }} // FIXED
           >
             Travel, Explore, Live!
           </motion.h1>
@@ -90,7 +140,7 @@ const Home = () => {
             className="text-xl md:text-2xl mb-8 drop-shadow-md"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+            transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" as any }} // FIXED
           >
             Your next adventure is just a click away.
           </motion.p>
@@ -98,20 +148,20 @@ const Home = () => {
             className="flex flex-col sm:flex-row gap-4 justify-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
+            transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" as any }} // FIXED
           >
-            <Link 
-              to="/enquiry" 
+            <a 
+              href="/enquiry" 
               className="bg-secondary text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-[#E56F4F] transform hover:scale-105 transition-all duration-300"
             >
               Plan My Trip
-            </Link>
-            <Link 
-              to="/packages" 
+            </a>
+            <a 
+              href="/packages" 
               className="bg-white text-text font-bold py-3 px-8 rounded-full text-lg hover:bg-gray-200 transform hover:scale-105 transition-all duration-300"
             >
               View Packages
-            </Link>
+            </a>
           </motion.div>
         </motion.div>
       </section>
@@ -119,9 +169,9 @@ const Home = () => {
       {/* --- Why Travel With Us (USPs) (Animated) --- */}
       <motion.section 
         className="py-20 px-6"
-        
-        initial={sectionVariants.hidden}
-        whileInView={sectionVariants.visible as any}
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
         viewport={{ once: true, amount: 0.3 }} // Trigger when 30% of the section is visible
       >
         <div className="container mx-auto max-w-6xl">
@@ -134,12 +184,17 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {/* USP 1 */}
             <motion.div 
-              className="text-center p-6 bg-white rounded-xl shadow-lg"
-              whileHover={{ y: -8, scale: 1.03 }} // Card lift on hover
+              className="text-center p-8 bg-white rounded-xl shadow-lg" // MODIFIED: Increased padding
+              whileHover={{ y: -10, scale: 1.03, boxShadow: "0px 15px 30px rgba(0,0,0,0.1)" }} // MODIFIED: More lift
+              transition={{ type: 'spring', stiffness: 300, damping: 15 }} // NEW: Springy transition
             >
-              <div className="flex justify-center mb-4">
+              <motion.div 
+                className="flex justify-center mb-4"
+                whileHover={{ scale: 1.1, rotate: -10 }} // NEW: Icon animation
+                transition={{ type: 'spring', stiffness: 300 }}
+              >
                 <TicketIcon />
-              </div>
+              </motion.div>
               <h3 className="text-2xl font-heading font-semibold mb-2">
                 Hassle-Free Booking
               </h3>
@@ -149,12 +204,17 @@ const Home = () => {
             </motion.div>
             {/* USP 2 */}
             <motion.div 
-              className="text-center p-6 bg-white rounded-xl shadow-lg"
-              whileHover={{ y: -8, scale: 1.03 }}
+              className="text-center p-8 bg-white rounded-xl shadow-lg" // MODIFIED: Increased padding
+              whileHover={{ y: -10, scale: 1.03, boxShadow: "0px 15px 30px rgba(0,0,0,0.1)" }} // MODIFIED: More lift
+              transition={{ type: 'spring', stiffness: 300, damping: 15 }} // NEW: Springy transition
             >
-              <div className="flex justify-center mb-4">
+              <motion.div 
+                className="flex justify-center mb-4"
+                whileHover={{ scale: 1.1, rotate: 10 }} // NEW: Icon animation
+                transition={{ type: 'spring', stiffness: 300 }}
+              >
                 <GlobeIcon />
-              </div>
+              </motion.div>
               <h3 className="text-2xl font-heading font-semibold mb-2">
                 Local Experiences
               </h3>
@@ -164,12 +224,17 @@ const Home = () => {
             </motion.div>
             {/* USP 3 */}
             <motion.div 
-              className="text-center p-6 bg-white rounded-xl shadow-lg"
-              whileHover={{ y: -8, scale: 1.03 }}
+              className="text-center p-8 bg-white rounded-xl shadow-lg" // MODIFIED: Increased padding
+              whileHover={{ y: -10, scale: 1.03, boxShadow: "0px 15px 30px rgba(0,0,0,0.1)" }} // MODIFIED: More lift
+              transition={{ type: 'spring', stiffness: 300, damping: 15 }} // NEW: Springy transition
             >
-              <div className="flex justify-center mb-4">
+              <motion.div 
+                className="flex justify-center mb-4"
+                whileHover={{ scale: 1.1, rotate: -10 }} // NEW: Icon animation
+                transition={{ type: 'spring', stiffness: 300 }}
+              >
                 <SparklesIcon />
-              </div>
+              </motion.div>
               <h3 className="text-2xl font-heading font-semibold mb-2">
                 Custom Trips
               </h3>
@@ -184,9 +249,9 @@ const Home = () => {
       {/* --- Popular Packages (Animated) --- */}
       <motion.section 
         className="py-20 px-6 bg-white"
-        
-        initial={sectionVariants.hidden}
-        whileInView={sectionVariants.visible as any}
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
         viewport={{ once: true, amount: 0.2 }} // Trigger when 20% is visible
       >
         <div className="container mx-auto max-w-6xl">
@@ -194,13 +259,12 @@ const Home = () => {
             Popular Packages
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* We map over the first 3 packages from your data file */}
             {dummyPackages.slice(0, 3).map((pkg, index) => (
               <motion.div
                 key={pkg.id}
-                 // Use the same slide-up variant
-                initial={sectionVariants.hidden}
-        whileInView={sectionVariants.visible as any}
+                variants={sectionVariants} // Use the same slide-up variant
+                initial="hidden"
+                whileInView="visible"
                 viewport={{ once: true, amount: 0.5 }}
                 transition={{ delay: index * 0.1 }} // Stagger animation
               >
@@ -215,18 +279,18 @@ const Home = () => {
             ))}
           </div>
           <div className="text-center mt-12">
-            <Link 
-              to="/packages"
+            <a 
+              href="/packages"
               className="bg-primary text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-opacity-90 transform hover:scale-105 transition-all duration-300"
             >
               View All Packages
-            </Link>
+            </a>
           </div>
         </div>
       </motion.section>
 
       {/* --- Enquiry CTA Section --- */}
-      <section className="py-20 px-6 bg-accent text-center">
+      <motion.section className="py-20 px-6 bg-accent text-center">
         <div className="container mx-auto max-w-4xl">
           <motion.h2 
             className="text-4xl font-heading font-bold text-text mb-4"
@@ -240,8 +304,8 @@ const Home = () => {
           <motion.p 
             className="text-xl text-gray-800 mb-8"
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            whileInView={{ opacity: 1, y: 0 }} // MODIFIED: Use whileInView
+            transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" as any }} // FIXED
             viewport={{ once: true }}
           >
             Let's plan the trip of a lifetime. Get in touch with our experts today!
@@ -252,19 +316,21 @@ const Home = () => {
             transition={{ duration: 0.5, delay: 0.4, type: "spring", stiffness: 100 }}
             viewport={{ once: true }}
           >
-            <Link 
-              to="/enquiry"
+            <a 
+              href="/enquiry"
               className="bg-secondary text-white font-bold py-3 px-10 rounded-full text-xl hover:bg-[#E56F4F] transform hover:scale-105 transition-all duration-300 shadow-lg"
             >
               Enquire Now
-            </Link>
+            </a>
           </motion.div>
         </div>
-      </section>
+      </motion.section> 
+      {/* FIXED: Corrected closing tag */}
 
-      {/* --- FOOTER WILL GO HERE --- */}
     </div>
   );
 };
 
+// Use default export for the main component
 export default Home;
+

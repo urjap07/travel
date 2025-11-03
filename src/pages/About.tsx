@@ -115,12 +115,12 @@ const itemVariants: Variants = {
   }
 };
 
-// MODIFIED: Made gradient animation faster
+// MODIFIED: Made gradient animation faster and more dynamic
 const gradientVariants: Variants = {
   animate: {
     backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
     transition: {
-      duration: 10, // Faster animation
+      duration: 15, // Slightly longer for a smoother flow
       ease: "linear",
       repeat: Infinity,
     },
@@ -157,6 +157,22 @@ const heroTextVariants: Variants = {
   },
 };
 
+// NEW: Variants for the background blobs in the hero
+const blobVariants: Variants = {
+  animate: {
+    y: ["0%", "10%", "0%"],
+    x: ["0%", "5%", "0%"],
+    rotate: [0, 360],
+    scale: [1, 1.1, 1],
+    transition: {
+      duration: 20,
+      ease: "linear",
+      repeat: Infinity,
+      repeatType: "loop",
+    },
+  },
+};
+
 // --- About Us Page Component ---
 const About = () => {
   return (
@@ -177,7 +193,6 @@ const About = () => {
             variants={gradientVariants}
             initial="animate"
             animate="animate"
-            // MODIFIED: Changed gradient to match Enquiry page
             style={{
                 background: 'linear-gradient(to right, var(--tw-gradient-stops))',
                 '--tw-gradient-stops': 'var(--tw-gradient-from) 0%, var(--tw-gradient-to) 100%',
@@ -187,7 +202,25 @@ const About = () => {
             } as React.CSSProperties}
         />
         
-        {/* REMOVED: Abstract Background Shapes */}
+        {/* NEW: Floating Background Blobs */}
+        <motion.div
+            className="absolute top-10 left-10 w-48 h-48 bg-white opacity-10 rounded-full blur-3xl"
+            variants={blobVariants}
+            animate="animate"
+            style={{ animationDelay: '0s' }}
+        />
+        <motion.div
+            className="absolute bottom-10 right-10 w-64 h-64 bg-secondary opacity-10 rounded-full blur-3xl"
+            variants={blobVariants}
+            animate="animate"
+            style={{ animationDelay: '5s' }}
+        />
+        <motion.div
+            className="absolute top-1/4 right-1/4 w-32 h-32 bg-primary opacity-10 rounded-full blur-3xl"
+            variants={blobVariants}
+            animate="animate"
+            style={{ animationDelay: '10s' }}
+        />
 
         <motion.div
           className="relative z-10"
@@ -195,7 +228,6 @@ const About = () => {
           animate="visible"
           transition={{ staggerChildren: 0.15, delayChildren: 0.2 }} // Stagger children for text reveal
         >
-          {/* MODIFIED: Removed animated gradient text styles */}
           <motion.h1 
             className="text-5xl md:text-7xl font-heading font-bold drop-shadow-lg"
             variants={heroTextVariants} 
@@ -249,7 +281,7 @@ const About = () => {
             className="text-lg text-gray-700 leading-relaxed mb-6"
             variants={itemVariants}
           >
-            Founded in 2020 by a team of passionate explorers, The Travel Group was born from a simple idea: travel should be extraordinary, accessible, and completely hassle-free. We were tired of cookie-cutter tours and impersonal service. We believed we could do better.
+            Founded in [Year] by a team of passionate explorers, The Travel Group was born from a simple idea: travel should be extraordinary, accessible, and completely hassle-free. We were tired of cookie-cutter tours and impersonal service. We believed we could do better.
           </motion.p>
           <motion.p 
             className="text-lg text-gray-700 leading-relaxed"
@@ -362,7 +394,7 @@ const About = () => {
         viewport={{ once: true, amount: 0.2 }}
       >
         <div className="container mx-auto max-w-4xl">
-          {/* MODIFIED: Re-added a colorful gradient */}
+          {/* MODIFIED: Re-added a colorful gradient for visibility */}
           <motion.h2 
             className="text-4xl font-heading font-bold text-text mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary"
             style={{ backgroundSize: '200% 200%' }}
