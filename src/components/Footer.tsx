@@ -73,9 +73,9 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-heading font-semibold mb-4 text-white drop-shadow-sm">Contact Us</h3>
             <ul className="space-y-2 text-gray-200">
-              <li>Email: info@travelgroup.com</li>
+              <li>Email: thetravelgroup@gmail.com</li>
               <li>Phone: +91 98765 43210</li>
-              <li>Address: 123 Travel St, Pune, India</li>
+              <li>Address: 27A, Paddapukur Road, Bakul Bagan, Kolkata - 700020</li>
             </ul>
           </div>
 
