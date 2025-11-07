@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from "react-router-dom";
-// MODIFIED: Imported motion and AnimatePresence for the mobile menu
+// MODIFIED: Imported motion and AnimatePresence
 import { motion, AnimatePresence, type Variants } from 'framer-motion';
 
 // --- NEW: Icons for mobile menu ---
@@ -59,10 +59,11 @@ const mobileMenuVariants: Variants = {
 export default function Navbar() {
  const { pathname } = useLocation();
   // NEW: State to manage mobile menu visibility
-const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+ const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-// Helper to style the active and hovered links
+ // Helper to style the active and hovered links
  const linkClass = (path: string, isMobile: boolean = false) => {
+    // MODIFIED: Added isMobile check for different styles
     const baseClass = isMobile
       ? "block w-full text-left px-4 py-3 text-lg" // Mobile styles
       : "py-2 px-4 rounded-xl transition font-medium transform"; // Desktop styles
@@ -82,33 +83,33 @@ const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     return `${baseClass} ${pathname === path ? activeClass : inactiveClass}`;
   };
 
-    return (
+  return (
     <nav className="bg-gradient-to-r from-[#F8FDFD] via-[#E0F7FA] to-[#B2EBF2] shadow-md px-4 sm:px-6 py-3 flex items-center justify-between sticky top-0 z-50 relative">
-      {/* MODIFIED: Added logo image and adjusted gap */}
-     <div className="font-heading text-2xl font-extrabold tracking-tight flex items-center">
-      <Link to="/" className="flex items-center gap-2">
-          {/* NEW: Logo Image */}
-          <img 
-            src="/TheTravelGroup_Logo.jpg" 
-            alt="The Travel Group Logo" 
-            className="h-10 w-auto" // Adjust h-10 (height) as needed
-            onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://placehold.co/100x100/eeeeee/333333?text=Logo'; (e.currentTarget as HTMLImageElement).onerror = null; }}
-          />
-          {/* MODIFIED: Wrapped text in a div for better alignment if needed */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:gap-1">
-        <span className="bg-gradient-to-r from-[#FF7A59] via-[#F4C542] to-[#00AFAA] text-transparent bg-clip-text leading-none">The Travel</span>
-         <span className="text-[#00AFAA] leading-none">Group</span>
-          </div>
-     </Link>
-    </div>
+      {/* MODIFIED: Replaced image with video */}
+     <div className="flex items-center">
+      <Link to="/" className="flex items-center">
+          {/* MODIFIED: Replaced <img> with <video> */}
+          <video 
+            // IMPORTANT: Replace this with the path to your video file
+            src="/Travel Logo Animation.mp4" 
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="h-16 w-auto" // Kept the same size as the logo
+          >
+            Your browser does not support the video tag.
+          </video>
+      </Link>
+      </div>
 
      {/* --- Desktop Menu --- */}
-     <div className="hidden md:flex space-x-2">
-    <Link to="/" className={linkClass("/")}>Home</Link>
-    <Link to="/packages" className={linkClass("/packages")}>Packages</Link>
-    <Link to="/enquiry" className={linkClass("/enquiry")}>Enquiry</Link>
-    <Link to="/about" className={linkClass("/about")}>About</Link>
-    </div>
+      <div className="hidden md:flex space-x-2">
+      <Link to="/" className={linkClass("/")}>Home</Link>
+      <Link to="/packages" className={linkClass("/packages")}>Packages</Link>
+      <Link to="/enquiry" className={linkClass("/enquiry")}>Enquiry</Link>
+      <Link to="/about" className={linkClass("/about")}>About</Link>
+      </div>
 
       {/* --- Mobile Menu Button --- */}
       {/* NEW: Show on medium and below */}
@@ -136,7 +137,6 @@ const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
               <Link to="/" className={linkClass("/", true)} onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
               <Link to="/packages" className={linkClass("/packages", true)} onClick={() => setIsMobileMenuOpen(false)}>Packages</Link>
               <Link to="/enquiry" className={linkClass("/enquiry", true)} onClick={() => setIsMobileMenuOpen(false)}>Enquiry</Link>
-
               <Link to="/about" className={linkClass("/about", true)} onClick={() => setIsMobileMenuOpen(false)}>About</Link>
             </div>
           </motion.div>
@@ -145,4 +145,3 @@ const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     </nav>
  );
 }
-
