@@ -65,6 +65,7 @@ const FlipPackageCard = ({ id, title, image, duration, price, highlights }: Flip
       className="relative w-full h-[420px] group [perspective:2000px]" 
       onMouseEnter={() => setIsFlipped(true)}
       onMouseLeave={() => setIsFlipped(false)}
+      onClick={() => setIsFlipped(!isFlipped)} // Tap to flip on mobile
     >
       <div
         className={cn(
@@ -185,14 +186,21 @@ const SlideButton = ({ text, hoverText, href, onClick, className = "" }: SlideBu
   );
 
   const containerClass = `relative overflow-hidden flex items-center justify-center group cursor-pointer ${className}`;
+  
+  // Handlers to support both Mouse (Desktop) and Touch (Mobile) interactions
+  const eventHandlers = {
+    onMouseEnter: () => setIsHovered(true),
+    onMouseLeave: () => setIsHovered(false),
+    onTouchStart: () => setIsHovered(true),
+    onTouchEnd: () => setIsHovered(false)
+  };
 
   if (href) {
     return (
       <Link
         to={href}
         className={containerClass}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        {...eventHandlers}
       >
         {content}
       </Link>
@@ -200,11 +208,10 @@ const SlideButton = ({ text, hoverText, href, onClick, className = "" }: SlideBu
   }
 
   return (
-    <div
-      onClick={onClick}
-      className={containerClass}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+    <div 
+      onClick={onClick} 
+      className={containerClass} 
+      {...eventHandlers}
     >
       {content}
     </div>
