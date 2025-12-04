@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useLocation } from "react-router-dom";
 // MODIFIED: Imported motion and AnimatePresence
 import { motion, AnimatePresence, type Variants } from 'framer-motion';
