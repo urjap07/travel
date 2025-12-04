@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion, type Variants } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { 
@@ -58,14 +58,14 @@ interface FlipCardProps {
 }
 
 const FlipPackageCard = ({ id, title, image, duration, price, highlights }: FlipCardProps) => {
-  const [isFlipped, setIsFlipped] = useState(false);
+  const [isFlipped, setIsFlipped] = React.useState(false);
 
   return (
     <div
       className="relative w-full h-[420px] group [perspective:2000px]" 
       onMouseEnter={() => setIsFlipped(true)}
       onMouseLeave={() => setIsFlipped(false)}
-      onClick={() => setIsFlipped(!isFlipped)} // Tap to flip on mobile
+      onClick={() => setIsFlipped(!isFlipped)}
     >
       <div
         className={cn(
@@ -90,7 +90,7 @@ const FlipPackageCard = ({ id, title, image, duration, price, highlights }: Flip
           <div className="relative h-[60%] w-full">
             <img src={image} alt={title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
             
-            {/* Hanging String - Visual element connecting top of card to badge */}
+            {/* Hanging String */}
             <div className="absolute top-0 right-9 w-0.5 h-4 bg-black z-10"></div>
 
             {/* Duration Badge */}
@@ -115,7 +115,7 @@ const FlipPackageCard = ({ id, title, image, duration, price, highlights }: Flip
             "absolute inset-0 w-full h-full",
             "[backface-visibility:hidden] [transform:rotateY(180deg)]",
             "rounded-xl overflow-hidden shadow-xl",
-            "bg-teal-600 text-white p-6", 
+            "bg-orange-600 text-white p-6", 
             "flex flex-col",
             "transition-all duration-700",
             !isFlipped ? "opacity-0" : "opacity-100"
@@ -145,7 +145,7 @@ const FlipPackageCard = ({ id, title, image, duration, price, highlights }: Flip
 };
 
 // ============================================================================
-// 2. SLIDE BUTTON COMPONENT
+// 2. SLIDE BUTTON COMPONENT (UPDATED FOR INSTANT MOBILE TOUCH)
 // ============================================================================
 
 interface SlideButtonProps {
@@ -157,62 +157,71 @@ interface SlideButtonProps {
 }
 
 const SlideButton = ({ text, hoverText, href, onClick, className = "" }: SlideButtonProps) => {
-  const [isHovered, setIsHovered] = useState(false);
+  const [isHovered, setIsHovered] = React.useState(false);
   const textTwo = hoverText || text;
 
+  // Variants for the text animations
+  const textOneVariants = {
+    initial: { y: "0%" },
+    hover: { y: "-100%" },
+  };
+
+  const textTwoVariants = {
+    initial: { y: "100%" },
+    hover: { y: "0%" },
+  };
+
   const content = (
-    <>
-      <span className="invisible whitespace-nowrap font-bold">
+    <div
+      className={`relative overflow-hidden flex items-center justify-center w-full h-full group ${className} rounded-full`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onTouchStart={() => setIsHovered(true)}
+      onTouchEnd={() => setIsHovered(false)}
+    >
+      {/* 1. INVISIBLE SPACER: Keeps button dimensions correct */}
+      <span className="invisible whitespace-nowrap font-bold px-4">
         {text.length > textTwo.length ? text : textTwo}
       </span>
+
+      {/* 2. ANIMATED TEXT */}
       <span className="absolute inset-0 flex flex-col items-center justify-center overflow-hidden">
+        {/* Initial Text: Slides OUT */}
         <motion.span
           className="absolute inset-0 flex items-center justify-center w-full h-full"
-          animate={{ y: isHovered ? "-100%" : "0%" }}
+          variants={textOneVariants}
+          initial="initial"
+          animate={isHovered ? "hover" : "initial"}
           transition={{ duration: 0.3, ease: "easeInOut" }}
         >
           {text}
         </motion.span>
+
+        {/* Hover Text: Slides IN */}
         <motion.span
           className="absolute inset-0 flex items-center justify-center w-full h-full"
-          initial={{ y: "100%" }}
-          animate={{ y: isHovered ? "0%" : "100%" }}
+          variants={textTwoVariants}
+          initial="initial"
+          animate={isHovered ? "hover" : "initial"}
           transition={{ duration: 0.3, ease: "easeInOut" }}
         >
           {textTwo}
         </motion.span>
       </span>
-    </>
+    </div>
   );
 
-  const containerClass = `relative overflow-hidden flex items-center justify-center group cursor-pointer ${className}`;
-  
-  // Handlers to support both Mouse (Desktop) and Touch (Mobile) interactions
-  const eventHandlers = {
-    onMouseEnter: () => setIsHovered(true),
-    onMouseLeave: () => setIsHovered(false),
-    onTouchStart: () => setIsHovered(true),
-    onTouchEnd: () => setIsHovered(false)
-  };
-
+  // If href is provided, wrap in Link, otherwise just a div/button
   if (href) {
     return (
-      <Link
-        to={href}
-        className={containerClass}
-        {...eventHandlers}
-      >
+      <Link to={href} className="inline-block" onClick={onClick}>
         {content}
       </Link>
     );
   }
 
   return (
-    <div 
-      onClick={onClick} 
-      className={containerClass} 
-      {...eventHandlers}
-    >
+    <div onClick={onClick} className="inline-block cursor-pointer">
       {content}
     </div>
   );
