@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, type Variants } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { 
@@ -58,7 +58,7 @@ interface FlipCardProps {
 }
 
 const FlipPackageCard = ({ id, title, image, duration, price, highlights }: FlipCardProps) => {
-  const [isFlipped, setIsFlipped] = React.useState(false);
+  const [isFlipped, setIsFlipped] = useState(false);
 
   return (
     <div
@@ -115,7 +115,7 @@ const FlipPackageCard = ({ id, title, image, duration, price, highlights }: Flip
             "absolute inset-0 w-full h-full",
             "[backface-visibility:hidden] [transform:rotateY(180deg)]",
             "rounded-xl overflow-hidden shadow-xl",
-            "bg-orange-600 text-white p-6", 
+            "bg-teal-600 text-white p-6", 
             "flex flex-col",
             "transition-all duration-700",
             !isFlipped ? "opacity-0" : "opacity-100"
@@ -157,27 +157,15 @@ interface SlideButtonProps {
 }
 
 const SlideButton = ({ text, hoverText, href, onClick, className = "" }: SlideButtonProps) => {
-  const [isHovered, setIsHovered] = React.useState(false);
   const textTwo = hoverText || text;
 
-  // Variants for the text animations
-  const textOneVariants = {
-    initial: { y: "0%" },
-    hover: { y: "-100%" },
-  };
-
-  const textTwoVariants = {
-    initial: { y: "100%" },
-    hover: { y: "0%" },
-  };
-
   const content = (
-    <div
+    <motion.div
       className={`relative overflow-hidden flex items-center justify-center w-full h-full group ${className} rounded-full`}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onTouchStart={() => setIsHovered(true)}
-      onTouchEnd={() => setIsHovered(false)}
+      initial="initial"
+      whileHover="hover"
+      whileTap="hover" // Ensures the effect triggers on touch
+      transition={{ duration: 0.3, ease: "easeInOut" }}
     >
       {/* 1. INVISIBLE SPACER: Keeps button dimensions correct */}
       <span className="invisible whitespace-nowrap font-bold px-4">
@@ -189,9 +177,10 @@ const SlideButton = ({ text, hoverText, href, onClick, className = "" }: SlideBu
         {/* Initial Text: Slides OUT */}
         <motion.span
           className="absolute inset-0 flex items-center justify-center w-full h-full"
-          variants={textOneVariants}
-          initial="initial"
-          animate={isHovered ? "hover" : "initial"}
+          variants={{
+            initial: { y: "0%" },
+            hover: { y: "-100%" },
+          }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
         >
           {text}
@@ -200,15 +189,16 @@ const SlideButton = ({ text, hoverText, href, onClick, className = "" }: SlideBu
         {/* Hover Text: Slides IN */}
         <motion.span
           className="absolute inset-0 flex items-center justify-center w-full h-full"
-          variants={textTwoVariants}
-          initial="initial"
-          animate={isHovered ? "hover" : "initial"}
+          variants={{
+            initial: { y: "100%" },
+            hover: { y: "0%" },
+          }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
         >
           {textTwo}
         </motion.span>
       </span>
-    </div>
+    </motion.div>
   );
 
   // If href is provided, wrap in Link, otherwise just a div/button
