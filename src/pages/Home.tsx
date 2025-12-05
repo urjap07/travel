@@ -392,6 +392,7 @@ const SlideButton = ({ text, hoverText, href, onClick, className = "" }: SlideBu
         {/* Initial Text: Slides OUT */}
         <motion.span
           className="absolute inset-0 flex items-center justify-center w-full h-full"
+          initial={{ y: "0%" }}
           animate={{ y: isHovered ? "-100%" : "0%" }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
         >
