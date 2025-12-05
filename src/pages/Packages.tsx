@@ -1,4 +1,4 @@
-import { motion, type Variants } from "framer-motion";
+import { motion, useScroll, useSpring, type Variants } from "framer-motion";
 import type { FC } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -61,6 +61,23 @@ const packagesData = [
   },
 ];
 
+// --- SCROLL PROGRESS COMPONENT ---
+function ScrollProgress({ className }: { className?: string }) {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
+
+  return (
+    <motion.div
+      className={cn("origin-left", className)}
+      style={{ scaleX }}
+    />
+  );
+}
+
 // --- COMPONENT: FLIP PACKAGE CARD ---
 interface FlipCardProps {
   id: number;
@@ -107,8 +124,12 @@ const FlipPackageCard = ({ id, title, image, duration, price, highlights }: Flip
               alt={title}
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             />
+            
+            {/* Hanging String Visual */}
+            <div className="absolute top-0 right-9 w-0.5 h-4 bg-black z-10"></div>
+
             {/* Duration Badge */}
-            <div className="absolute top-4 right-4 bg-[#FFC107] text-black font-bold px-3 py-1 rounded text-sm shadow-sm flex items-center gap-1">
+            <div className="absolute top-4 right-4 bg-[#FFC107] text-black font-bold px-3 py-1 rounded text-sm shadow-sm flex items-center gap-1 z-20">
                <Timer className="w-3 h-3" /> {duration}
             </div>
           </div>
@@ -127,13 +148,12 @@ const FlipPackageCard = ({ id, title, image, duration, price, highlights }: Flip
           </div>
         </div>
 
-        {/* --- BACK FACE (Color Changed Here) --- */}
+        {/* --- BACK FACE --- */}
         <div
           className={cn(
             "absolute inset-0 w-full h-full",
             "[backface-visibility:hidden] [transform:rotateY(180deg)]",
             "rounded-xl overflow-hidden shadow-xl",
-            // CHANGED: bg-teal-800 -> bg-orange-600 (You can change this to any color)
             "bg-teal-600 text-white p-6", 
             "flex flex-col",
             "transition-all duration-700",
@@ -141,10 +161,8 @@ const FlipPackageCard = ({ id, title, image, duration, price, highlights }: Flip
           )}
         >
           <div className="flex-1">
-            {/* CHANGED: border-teal-600 -> border-orange-500 */}
             <h3 className="text-lg font-bold mb-2 border-b border-orange-500 pb-2">{title}</h3>
             
-            {/* CHANGED: text-teal-200 -> text-orange-200 */}
             <p className="text-orange-200 text-xs uppercase tracking-wider font-semibold mb-4">
               Highlights
             </p>
@@ -207,7 +225,10 @@ const gradientVariants: Variants = {
 
 const Packages = () => {
   return (
-    <div className="bg-background min-h-screen">
+    <div className="bg-background min-h-screen relative">
+      {/* SCROLL PROGRESS BAR */}
+      <ScrollProgress className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-orange-400 to-orange-600 z-[10000]" />
+
       <section className="relative pt-24 pb-12 px-6 text-center text-white overflow-hidden">
         <motion.div
           className="absolute inset-0 z-0"

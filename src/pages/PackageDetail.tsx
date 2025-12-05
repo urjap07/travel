@@ -1,9 +1,30 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { motion, type Variants } from 'framer-motion';
+import { motion, useScroll, useSpring, type Variants } from 'framer-motion';
+
+// --- UTILITY HELPER ---
+function cn(...classes: (string | undefined | null | false)[]) {
+  return classes.filter(Boolean).join(' ');
+}
+
+// --- SCROLL PROGRESS COMPONENT ---
+function ScrollProgress({ className }: { className?: string }) {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
+
+  return (
+    <motion.div
+      className={cn("origin-left", className)}
+      style={{ scaleX }}
+    />
+  );
+}
 
 // --- MOCK DATA ---
-// Added mock data here so the file is self-contained and runnable.
 export interface Package {
   id: number;
   name: string;
@@ -19,7 +40,7 @@ export interface PackageDetailType {
   itinerary: { day: number; title: string; details: string; }[];
   inclusions: string[];
   exclusions: string[];
-  gallery: { url: string; title: string; }[]; // MODIFIED: Now an object
+  gallery: { url: string; title: string; }[]; 
   testimonials: { name: string; quote: string; }[];
 }
 
@@ -74,7 +95,6 @@ export const dummyPackages: Package[] = [
   },
 ];
 
-// MODIFIED: Updated gallery to be an array of objects
 export const packageDetails: PackageDetailType[] = [
   // Package 1: Goa
   {
@@ -299,11 +319,14 @@ const PackageDetail = () => {
 
   return (
     <motion.div 
-      className="bg-background font-body"
+      className="bg-background font-body relative" // Added relative for scroll positioning
       variants={pageVariants}
       initial="hidden"
       animate="visible"
     >
+      {/* SCROLL PROGRESS BAR */}
+      <ScrollProgress className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-orange-400 to-orange-600 z-[10000]" />
+
       {/* Hero Section */}
       <section 
         className="h-[50vh] min-h-[300px] bg-cover bg-center flex items-center justify-center text-white text-center px-6 relative"
@@ -459,4 +482,3 @@ const PackageDetail = () => {
 };
 
 export default PackageDetail;
-

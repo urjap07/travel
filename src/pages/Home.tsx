@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion, type Variants } from 'framer-motion';
+import React, { useState, useContext, useEffect, useId, useRef } from 'react';
+import { motion, AnimatePresence, useScroll, useSpring, type Variants, type Transition } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { 
   ArrowRight, 
@@ -7,7 +7,8 @@ import {
   Globe as GlobeIcon, 
   Sparkles as SparklesIcon,
   CheckCircle,
-  Timer
+  Timer,
+  X
 } from 'lucide-react';
 
 // ============================================================================
@@ -45,7 +46,216 @@ const homePackagesData = [
 ];
 
 // ============================================================================
-// 1. FLIP PACKAGE CARD COMPONENT
+// 1. SCROLL PROGRESS COMPONENT
+// ============================================================================
+
+interface ScrollProgressProps {
+  className?: string;
+  containerRef?: React.RefObject<HTMLElement>;
+}
+
+function ScrollProgress({ className, containerRef }: ScrollProgressProps) {
+  const { scrollYProgress } = useScroll({
+    container: containerRef,
+  });
+
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
+
+  return (
+    <motion.div
+      className={cn("origin-left", className)}
+      style={{ scaleX }}
+    />
+  );
+}
+
+// ============================================================================
+// 2. MORPHING DIALOG COMPONENTS
+// ============================================================================
+
+type MorphingDialogContextType = {
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  uniqueId: string;
+  triggerRef: React.RefObject<HTMLDivElement>;
+  transition?: Transition;
+};
+
+const MorphingDialogContext = React.createContext<MorphingDialogContextType | null>(null);
+
+function useMorphingDialog() {
+  const context = useContext(MorphingDialogContext);
+  if (!context) {
+    throw new Error('useMorphingDialog must be used within a MorphingDialogProvider');
+  }
+  return context;
+}
+
+type MorphingDialogProps = {
+  children: React.ReactNode;
+  transition?: Transition;
+};
+
+function MorphingDialog({ children, transition }: MorphingDialogProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const uniqueId = useId();
+  const triggerRef = useRef<HTMLDivElement>(null);
+
+  return (
+    <MorphingDialogContext.Provider value={{ isOpen, setIsOpen, uniqueId, triggerRef, transition }}>
+      {children}
+    </MorphingDialogContext.Provider>
+  );
+}
+
+type MorphingDialogTriggerProps = {
+  children: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
+};
+
+function MorphingDialogTrigger({ children, className, style }: MorphingDialogTriggerProps) {
+  const { setIsOpen, uniqueId, triggerRef } = useMorphingDialog();
+
+  return (
+    <motion.div
+      ref={triggerRef}
+      layoutId={`dialog-${uniqueId}`}
+      className={cn('cursor-pointer', className)}
+      onClick={() => setIsOpen(true)}
+      style={style}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+type MorphingDialogContainerProps = {
+  children: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
+};
+
+function MorphingDialogContainer({ children, className, style }: MorphingDialogContainerProps) {
+  const { isOpen, setIsOpen } = useMorphingDialog();
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [isOpen]);
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <div className={cn('fixed inset-0 z-50 flex items-center justify-center', className)} style={style}>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            onClick={() => setIsOpen(false)}
+          />
+          <div className="relative z-50 w-full max-w-lg px-6">
+             {children}
+          </div>
+        </div>
+      )}
+    </AnimatePresence>
+  );
+}
+
+type MorphingDialogContentProps = {
+  children: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
+};
+
+function MorphingDialogContent({ children, className, style }: MorphingDialogContentProps) {
+  const { uniqueId, transition } = useMorphingDialog();
+
+  return (
+    <motion.div
+      layoutId={`dialog-${uniqueId}`}
+      className={cn('overflow-hidden bg-white', className)}
+      style={style}
+      transition={transition}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function MorphingDialogClose({ className }: { className?: string }) {
+  const { setIsOpen } = useMorphingDialog();
+  return (
+    <button
+      className={cn('absolute right-4 top-4 p-2 rounded-full bg-black/5 hover:bg-black/10 transition-colors', className)}
+      onClick={(e) => {
+        e.stopPropagation();
+        setIsOpen(false);
+      }}
+    >
+      <X className="h-4 w-4" />
+    </button>
+  );
+}
+
+function MorphingDialogImage({ src, alt, className }: { src: string; alt: string; className?: string }) {
+  const { uniqueId } = useMorphingDialog();
+  return (
+    <motion.img
+      layoutId={`dialog-img-${uniqueId}`}
+      src={src}
+      alt={alt}
+      className={cn('', className)}
+    />
+  );
+}
+
+function MorphingDialogTitle({ children, className }: { children: React.ReactNode; className?: string }) {
+  const { uniqueId } = useMorphingDialog();
+  return (
+    <motion.h3 layoutId={`dialog-title-${uniqueId}`} className={className}>
+      {children}
+    </motion.h3>
+  );
+}
+
+function MorphingDialogSubtitle({ children, className }: { children: React.ReactNode; className?: string }) {
+  const { uniqueId } = useMorphingDialog();
+  return (
+    <motion.div layoutId={`dialog-subtitle-${uniqueId}`} className={className}>
+      {children}
+    </motion.div>
+  );
+}
+
+function MorphingDialogDescription({ children, className, disableLayoutAnimation, variants }: { children: React.ReactNode; className?: string; disableLayoutAnimation?: boolean; variants?: Variants }) {
+  const { uniqueId } = useMorphingDialog();
+  return (
+    <motion.div
+      {...(!disableLayoutAnimation && { layoutId: `dialog-description-${uniqueId}` })}
+      className={className}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      variants={variants}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+// ============================================================================
+// 3. FLIP PACKAGE CARD COMPONENT
 // ============================================================================
 
 interface FlipCardProps {
@@ -90,7 +300,7 @@ const FlipPackageCard = ({ id, title, image, duration, price, highlights }: Flip
           <div className="relative h-[60%] w-full">
             <img src={image} alt={title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
             
-            {/* Hanging String */}
+            {/* Hanging String Visual */}
             <div className="absolute top-0 right-9 w-0.5 h-4 bg-black z-10"></div>
 
             {/* Duration Badge */}
@@ -145,7 +355,7 @@ const FlipPackageCard = ({ id, title, image, duration, price, highlights }: Flip
 };
 
 // ============================================================================
-// 2. SLIDE BUTTON COMPONENT (UPDATED FOR INSTANT MOBILE TOUCH)
+// 2. SLIDE BUTTON COMPONENT
 // ============================================================================
 
 interface SlideButtonProps {
@@ -157,15 +367,20 @@ interface SlideButtonProps {
 }
 
 const SlideButton = ({ text, hoverText, href, onClick, className = "" }: SlideButtonProps) => {
+  const [isHovered, setIsHovered] = useState(false);
   const textTwo = hoverText || text;
 
+  // Event handlers for both Mouse (Desktop) and Touch (Mobile)
+  const handleInteractionStart = () => setIsHovered(true);
+  const handleInteractionEnd = () => setIsHovered(false);
+
   const content = (
-    <motion.div
+    <div
       className={`relative overflow-hidden flex items-center justify-center w-full h-full group ${className} rounded-full`}
-      initial="initial"
-      whileHover="hover"
-      whileTap="hover" // Ensures the effect triggers on touch
-      transition={{ duration: 0.3, ease: "easeInOut" }}
+      onMouseEnter={handleInteractionStart}
+      onMouseLeave={handleInteractionEnd}
+      onTouchStart={handleInteractionStart}
+      onTouchEnd={handleInteractionEnd}
     >
       {/* 1. INVISIBLE SPACER: Keeps button dimensions correct */}
       <span className="invisible whitespace-nowrap font-bold px-4">
@@ -177,10 +392,7 @@ const SlideButton = ({ text, hoverText, href, onClick, className = "" }: SlideBu
         {/* Initial Text: Slides OUT */}
         <motion.span
           className="absolute inset-0 flex items-center justify-center w-full h-full"
-          variants={{
-            initial: { y: "0%" },
-            hover: { y: "-100%" },
-          }}
+          animate={{ y: isHovered ? "-100%" : "0%" }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
         >
           {text}
@@ -189,36 +401,40 @@ const SlideButton = ({ text, hoverText, href, onClick, className = "" }: SlideBu
         {/* Hover Text: Slides IN */}
         <motion.span
           className="absolute inset-0 flex items-center justify-center w-full h-full"
-          variants={{
-            initial: { y: "100%" },
-            hover: { y: "0%" },
-          }}
+          initial={{ y: "100%" }}
+          animate={{ y: isHovered ? "0%" : "100%" }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
         >
           {textTwo}
         </motion.span>
       </span>
-    </motion.div>
+    </div>
   );
 
-  // If href is provided, wrap in Link, otherwise just a div/button
   if (href) {
     return (
-      <Link to={href} className="inline-block" onClick={onClick}>
+      <Link 
+        to={href} 
+        className="inline-block" 
+        onClick={onClick}
+      >
         {content}
       </Link>
     );
   }
 
   return (
-    <div onClick={onClick} className="inline-block cursor-pointer">
+    <div 
+      onClick={onClick} 
+      className="inline-block cursor-pointer"
+    >
       {content}
     </div>
   );
 };
 
 // ============================================================================
-// 3. MAIN HOME COMPONENT
+// 5. MAIN HOME COMPONENT
 // ============================================================================
 
 const sectionVariants: Variants = { hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } } };
@@ -226,7 +442,10 @@ const gradientVariants: Variants = { animate: { backgroundPosition: ['0% 50%', '
 
 const Home = () => {
   return (
-    <div className="bg-background font-body text-text">
+    <div className="bg-background font-body text-text relative">
+      
+      {/* --- SCROLL PROGRESS BAR (FIXED TOP) --- */}
+      <ScrollProgress className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-orange-400 to-orange-600 z-[10000]" />
 
       {/* HERO SECTION */}
       <section className="relative h-[55vh] sm:h-[60vh] min-h-[380px] sm:min-h-[420px] flex items-center justify-center text-center text-white px-4 sm:px-6 overflow-hidden">
@@ -245,13 +464,77 @@ const Home = () => {
               className="bg-secondary text-white font-bold py-3 px-6 sm:px-8 rounded-full text-base sm:text-lg hover:bg-[#E56F4F] shadow-lg" 
             />
 
-            {/* --- VIEW PACKAGES: DIRECT LINK --- */}
-            <SlideButton 
-              text="View Packages" 
-              hoverText="Explore Deals" 
-              href="/packages" 
-              className="bg-white text-text font-bold py-3 px-6 sm:px-8 rounded-full text-base sm:text-lg hover:bg-gray-100 shadow-lg" 
-            />
+            {/* --- VIEW PACKAGES: MORPHING DIALOG TRIGGER --- */}
+            <MorphingDialog transition={{ type: 'spring', bounce: 0.05, duration: 0.25 }}>
+              <MorphingDialogTrigger className="inline-block">
+                <SlideButton 
+                  text="View Packages" 
+                  hoverText="Explore Deals" 
+                  className="bg-white text-text font-bold py-3 px-6 sm:px-8 rounded-full text-base sm:text-lg hover:bg-gray-100 shadow-lg" 
+                />
+              </MorphingDialogTrigger>
+              
+              <MorphingDialogContainer>
+                <MorphingDialogContent 
+                  style={{ borderRadius: '24px' }} 
+                  className="pointer-events-auto relative flex h-auto w-full flex-col overflow-hidden bg-white border border-zinc-950/10 sm:w-[500px]"
+                >
+                  <div className="relative h-48 w-full overflow-hidden bg-gray-100">
+                     <MorphingDialogImage
+                        src="/Bali_image.jpg"
+                        alt="Travel Packages"
+                        className="h-full w-full object-cover"
+                     />
+                     <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                        <h3 className="text-3xl font-bold text-white drop-shadow-md">Top Destinations</h3>
+                     </div>
+                  </div>
+
+                  <div className="p-6">
+                    <MorphingDialogTitle className="text-2xl font-bold text-zinc-950 mb-2">
+                      Explore Our Packages
+                    </MorphingDialogTitle>
+                    <MorphingDialogSubtitle className="text-zinc-500 mb-4">
+                      Hand-picked destinations just for you.
+                    </MorphingDialogSubtitle>
+                    
+                    <MorphingDialogDescription
+                      disableLayoutAnimation
+                      variants={{
+                        initial: { opacity: 0, scale: 0.8, y: 20 },
+                        animate: { opacity: 1, scale: 1, y: 0 },
+                        exit: { opacity: 0, scale: 0.8, y: 20 },
+                      }}
+                      className="space-y-4"
+                    >
+                      <div className="grid grid-cols-2 gap-3">
+                         <div className="p-3 bg-zinc-50 rounded-lg border border-zinc-100">
+                            <p className="font-bold text-zinc-800">Goa</p>
+                            <p className="text-xs text-zinc-500">Beaches & Party</p>
+                         </div>
+                         <div className="p-3 bg-zinc-50 rounded-lg border border-zinc-100">
+                            <p className="font-bold text-zinc-800">Manali</p>
+                            <p className="text-xs text-zinc-500">Snow & Mountains</p>
+                         </div>
+                         <div className="p-3 bg-zinc-50 rounded-lg border border-zinc-100">
+                            <p className="font-bold text-zinc-800">Paris</p>
+                            <p className="text-xs text-zinc-500">Romance & City</p>
+                         </div>
+                         <div className="p-3 bg-zinc-50 rounded-lg border border-zinc-100">
+                            <p className="font-bold text-zinc-800">Bali</p>
+                            <p className="text-xs text-zinc-500">Tropical Paradise</p>
+                         </div>
+                      </div>
+
+                      <Link to="/packages" className="block w-full mt-4 text-center bg-secondary text-white font-bold py-3 rounded-xl shadow-md hover:bg-orange-600 transition-colors">
+                         See All Packages
+                      </Link>
+                    </MorphingDialogDescription>
+                  </div>
+                  <MorphingDialogClose className="text-zinc-500" />
+                </MorphingDialogContent>
+              </MorphingDialogContainer>
+            </MorphingDialog>
           
           </motion.div>
         </motion.div>
@@ -309,12 +592,33 @@ const Home = () => {
             ))}
           </div>
           <div className="flex justify-center mt-10 sm:mt-12">
-            <SlideButton 
-              text="View All Packages" 
-              hoverText="See Full List" 
-              href="/packages" 
-              className="bg-primary text-white font-bold py-3 px-6 sm:px-8 rounded-full text-base sm:text-lg hover:bg-opacity-90 shadow-lg" 
-            />
+            {/* Also use Morphing Dialog for this bottom button */}
+            <MorphingDialog transition={{ type: 'spring', bounce: 0.05, duration: 0.25 }}>
+              <MorphingDialogTrigger className="inline-block">
+                 <SlideButton 
+                  text="View All Packages" 
+                  hoverText="See Full List" 
+                  className="bg-primary text-white font-bold py-3 px-6 sm:px-8 rounded-full text-base sm:text-lg hover:bg-opacity-90 shadow-lg" 
+                />
+              </MorphingDialogTrigger>
+              <MorphingDialogContainer>
+                <MorphingDialogContent style={{ borderRadius: '24px' }} className="pointer-events-auto relative flex h-auto w-full flex-col overflow-hidden bg-white border border-zinc-950/10 sm:w-[500px]">
+                   <div className="relative h-48 w-full overflow-hidden bg-gray-100">
+                     <MorphingDialogImage src="/Thailand_image.jpg" alt="All Packages" className="h-full w-full object-cover" />
+                     <div className="absolute inset-0 bg-black/20 flex items-center justify-center"><h3 className="text-3xl font-bold text-white drop-shadow-md">All Destinations</h3></div>
+                   </div>
+                   <div className="p-6">
+                    <MorphingDialogTitle className="text-2xl font-bold text-zinc-950 mb-2">Ready to Explore?</MorphingDialogTitle>
+                    <MorphingDialogSubtitle className="text-zinc-500 mb-4">We have over 50+ destinations waiting for you.</MorphingDialogSubtitle>
+                    <MorphingDialogDescription disableLayoutAnimation className="space-y-4">
+                      <p className="text-sm text-gray-600">From the snowy peaks of Manali to the tropical beaches of Bali, we curate the best experiences for every traveler.</p>
+                      <Link to="/packages" className="block w-full mt-4 text-center bg-secondary text-white font-bold py-3 rounded-xl shadow-md hover:bg-orange-600 transition-colors">Browse Full Catalog</Link>
+                    </MorphingDialogDescription>
+                   </div>
+                   <MorphingDialogClose className="text-zinc-500" />
+                </MorphingDialogContent>
+              </MorphingDialogContainer>
+            </MorphingDialog>
           </div>
         </div>
       </motion.section>

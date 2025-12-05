@@ -1,5 +1,19 @@
 import React from 'react';
-import { motion, type Variants } from 'framer-motion';
+import { motion, useScroll, useSpring, type Variants } from 'framer-motion';
+
+// --- UTILITY HELPER ---
+function cn(...classes: (string | undefined | null | false)[]) {
+  return classes.filter(Boolean).join(' ');
+}
+
+// ============================================================================
+// SCROLL PROGRESS COMPONENT
+// ============================================================================
+function ScrollProgress({ className }: { className?: string }) {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+  return <motion.div className={cn("origin-left", className)} style={{ scaleX }} />;
+}
 
 // --- Inline SVG Icons ---
 const UsersIcon = ({ className }: { className?: string }) => (
@@ -78,9 +92,6 @@ const GlobeIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-
-// --- Icon Wrapper Component (for Mission/Vision) ---
-// REMOVED: This component is no longer needed as icons are placed directly.
 
 // --- Animation Variants ---
 const pageVariants: Variants = {
@@ -177,11 +188,13 @@ const blobVariants: Variants = {
 const About = () => {
   return (
     <motion.div
-      className="bg-background font-body"
+      className="bg-background font-body relative" // Added relative for scroll progress positioning context if needed, though fixed works globally
       variants={pageVariants}
       initial="hidden"
       animate="visible"
     >
+      {/* --- SCROLL PROGRESS BAR (FIXED TOP) --- */}
+      <ScrollProgress className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-orange-400 to-orange-600 z-[10000]" />
       
       {/* --- Hero Section --- */}
       <motion.section 
@@ -442,4 +455,3 @@ const About = () => {
 };
 
 export default About;
-
