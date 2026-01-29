@@ -15,6 +15,12 @@ const XIcon = () => (
   </svg>
 );
 
+// --- Animation variants ---
+const mobileMenuVariants: Variants = {
+  hidden: { opacity: 0, y: -20, transition: { duration: 0.2, ease: "easeOut" } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeIn" } },
+};
+
 const dropdownVariants: Variants = {
   hidden: { opacity: 0, y: -10, display: 'none' },
   visible: { 
@@ -81,10 +87,7 @@ export default function Navbar() {
             type="button"
             className={linkClass("/packages")}
             onClick={() => {
-              // Toggle the dropdown instantly for visual feedback
               setIsPackagesDropdownOpen(!isPackagesDropdownOpen);
-              
-              // Wait 1 second so the orange hover/active color is seen
               setTimeout(() => {
                 navigate("/packages");
                 setIsPackagesDropdownOpen(false);
@@ -103,7 +106,6 @@ export default function Navbar() {
                 <div className="flex flex-col gap-1.5">
                   <button 
                     onClick={() => {
-                      // Navigate to sub-packages with same 1s delay logic if preferred
                       setTimeout(() => { navigate("/group-packages"); setIsPackagesDropdownOpen(false); }, 1000);
                     }}
                     className="block px-5 py-4 rounded-2xl text-gray-800 font-bold hover:bg-[#FF7A59] hover:text-white transition-all text-sm text-left w-full"
@@ -135,6 +137,57 @@ export default function Navbar() {
           {isMobileMenuOpen ? <XIcon /> : <MenuIcon />}
         </button>
       </div>
+
+      {/* --- Mobile Menu Dropdown (THIS WAS MISSING) --- */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div 
+            className="absolute top-full left-0 right-0 bg-white shadow-lg md:hidden z-[9999]" 
+            variants={mobileMenuVariants} 
+            initial="hidden" 
+            animate="visible" 
+            exit="hidden"
+          >
+            <div className="flex flex-col py-4 px-6 gap-2">
+              <Link to="/" className={linkClass("/", true)} onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
+              
+              <div className="mt-4 mb-1">
+                <span className="text-xl font-bold text-[#1A1A1A] px-4">Packages</span>
+              </div>
+
+              <div className="bg-gray-50 border-y border-gray-100 py-4 my-2 rounded-2xl">
+                  <span className="block px-6 py-1 text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Explore Packages</span>
+                  <button 
+                    className="block w-full text-left px-6 py-3 text-gray-700 font-bold hover:text-[#FF7A59] transition-colors"
+                    onClick={() => {
+                      setTimeout(() => {
+                        navigate("/group-packages");
+                        setIsMobileMenuOpen(false);
+                      }, 1000);
+                    }}
+                  >
+                    Group / Family Packages
+                  </button>
+                  <button 
+                    className="block w-full text-left px-6 py-3 text-gray-700 font-bold hover:text-[#FF7A59] transition-colors"
+                    onClick={() => {
+                      setTimeout(() => {
+                        navigate("/packages");
+                        setIsMobileMenuOpen(false);
+                      }, 1000);
+                    }}
+                  >
+                    Popular Packages
+                  </button>
+              </div>
+
+              <Link to="/gallery" className={linkClass("/gallery", true)} onClick={() => setIsMobileMenuOpen(false)}>Gallery</Link>
+              <Link to="/enquiry" className={linkClass("/enquiry", true)} onClick={() => setIsMobileMenuOpen(false)}>Enquiry</Link>
+              <Link to="/about" className={linkClass("/about", true)} onClick={() => setIsMobileMenuOpen(false)}>About</Link>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }
