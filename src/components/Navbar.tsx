@@ -27,12 +27,12 @@ const dropdownVariants: Variants = {
     opacity: 1, 
     y: 0, 
     display: 'block', 
-    transition: { duration: 0.8, ease: "easeOut" } 
+    transition: { duration: 0, ease: "easeOut" } 
   },
   exit: { 
     opacity: 0, 
     y: -10, 
-    transition: { duration: 0.8, ease: "easeIn" }, 
+    transition: { duration: 0, ease: "easeIn" }, 
     transitionEnd: { display: 'none' } 
   }
 };
