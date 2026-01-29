@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Packages from './pages/Packages';
+import GroupPackages from './pages/GroupPackages'; // ✅ NEW IMPORT
 import Enquiry from './pages/Enquiry'; 
 import About from './pages/About'; 
 import PackageDetail from './pages/PackageDetail'; 
@@ -25,6 +26,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/packages" element={<Packages />} />
+          
+          {/* ✅ NEW ROUTE for Group/Family Packages */}
+          <Route path="/group-packages" element={<GroupPackages />} />
+          
           <Route path="/package/:id" element={<PackageDetail />} />
           <Route path="/enquiry" element={<Enquiry />} />
           <Route path="/about" element={<About />} />
@@ -39,4 +44,3 @@ function App() {
 }
 
 export default App;
-

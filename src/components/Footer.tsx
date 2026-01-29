@@ -73,9 +73,11 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-heading font-semibold mb-4 text-white drop-shadow-sm">Contact Us</h3>
             <ul className="space-y-2 text-gray-200">
-              <li>Email: thetravelgroup@gmail.com</li>
-              <li>Phone: +91 98765 43210</li>
-              <li>Address: 27A, Paddapukur Road, Bakul Bagan, Kolkata - 700020</li>
+              <li>Email: thetravelgroup365@gmail.com</li>
+              <li>Phone: +91 9831283011, 
+                    <br />+91 7980559299
+              </li>
+              <li>Address: 94B, Bakul Bagan Road Bhowanipur, Kolkata - 25</li>
             </ul>
           </div>
 
@@ -84,8 +86,7 @@ const Footer = () => {
             <h3 className="text-lg font-heading font-semibold mb-4 text-white drop-shadow-sm">Follow Us</h3>
             <div className="flex space-x-6">
               <a href="#" target="_blank" rel="noopener noreferrer" className="text-white hover:opacity-80 transition-opacity"><FacebookIcon /></a>
-              <a href="#" target="_blank" rel="noopener noreferrer" className="text-white hover:opacity-80 transition-opacity"><InstagramIcon /></a>
-              <a href="#" target="_blank" rel="noopener noreferrer" className="text-white hover:opacity-80 transition-opacity"><TwitterIcon /></a>
+              <a href="https://www.instagram.com/thetravel.group?igsh=cnlsM2s3dzVkM2xh" target="_blank" rel="noopener noreferrer" className="text-white hover:opacity-80 transition-opacity"><InstagramIcon /></a>
             </div>
           </div>
         </div>

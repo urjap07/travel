@@ -74,7 +74,7 @@ const Footer = () => {
             <h3 className="text-lg font-heading font-semibold mb-4 text-accent">Follow Us</h3>
             <div className="flex space-x-6">
               <SocialIcon href="#"><FacebookIcon /></SocialIcon>
-              <SocialIcon href="#"><InstagramIcon /></SocialIcon>
+              <SocialIcon href="https://www.instagram.com/thetravel.group?igsh=cnlsM2s3dzVkM2xh"><InstagramIcon /></SocialIcon>
               <SocialIcon href="#"><TwitterIcon /></SocialIcon>
             </div>
           </div>

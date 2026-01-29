@@ -93,6 +93,30 @@ export const dummyPackages: Package[] = [
     price: '30,000/-',
     imageUrl: '/Thailand_image.jpg',
   },
+  {
+    id: 7,
+    name: 'Chardham Yatra',
+    duration: '5D/4N',
+    region: 'Uttarakhand',
+    price: '90,000/-',
+    imageUrl: '/Chardham_image.jpg',
+  },
+  {
+    id: 8,
+    name: 'Best of Europe Tour',
+    duration: '13D/12N',
+    region: 'Europe',
+    price: '1,50,000/-',
+    imageUrl: '/Italy_image.jpg',
+  },
+  {
+    id: 9,
+    name: 'Beauty of Europe Tour',
+    duration: '9D/8N',
+    region: 'Europe',
+    price: '1,25,000/-',
+    imageUrl: '/Switzerland_image.jpg',
+  },
 ];
 
 export const packageDetails: PackageDetailType[] = [
@@ -236,6 +260,117 @@ export const packageDetails: PackageDetailType[] = [
       { name: 'College Friends Group', quote: 'Amazing and affordable. Coral Island was beautiful and Safari World was so much fun!' }
     ]
   },
+  {
+    id: 7,
+    description: "The perfect trip to the holy Char Dham where peace and tranquility await you.",
+    itinerary: [
+      { day: 1, title: 'Haridwar / Dehradun → Yamunotri', details: 'Early morning departure towards Barkot, enjoying scenic Himalayan views en route. Drive to Janki Chatti and begin the trek (or pony/palki) to Yamunotri Temple. Take a holy dip in Surya Kund, perform pooja, and return to Barkot.' },
+      { day: 2, title: 'Barkot → Uttarkashi → Gangotri', details: 'Proceed to Uttarkashi, visiting Vishwanath Temple on the way. Continue towards Gangotri, one of the most sacred Char Dhams. Offer prayers at Ganga Mata Temple and soak in the spiritual aura of the Bhagirathi River.' },
+      { day: 3, title: 'Uttarkashi → Guptkashi / Sitapur', details: 'Drive through mesmerizing mountain roads alongside rivers and valleys. Enjoy views of Tehri Dam and lush Himalayan landscapes. Reach Guptkashi or Sitapur by evening.' },
+      { day: 4, title: 'Kedarnath Darshan', details: 'Early morning drive to Gaurikund, followed by a trek to Kedarnath Temple (or helicopter service optional). Attend darshan and evening aarti at one of the holiest Jyotirlingas of Lord Shiva.' },
+      { day: 5, title: 'Kedarnath → Badrinath → Haridwar / Dehradun -> Departure', details: 'Descend from Kedarnath and drive towards Badrinath, visiting Tapt Kund, Mana Village, and Badrinath Temple for darshan. After completing the Char Dham circuit, proceed for return journey with divine blessings.' },
+    ],
+    inclusions: ['Comfortable Accommodation', 'Helicopter Transfers', 'VIP Darshans', '5 Night Stay', 'All Meals', 'Transportation'],
+    exclusions: ['Camera / video camera fees at monuments or temples', 'Additional meals not mentioned in the inclusions', 'Mini bar, room service, or extra food orders', 'Personal expenses'],
+    gallery: [
+      { url: '/Chardham_image_1.jpg', title: 'Yamunotri Temple' },
+      { url: '/Chardham_image_2.jpg', title: 'Gangotri Temple' },
+      { url: '/Chardham_image_3.jpg', title: 'Kedarnath Temple' },
+      { url: '/Chardham_image_4.jpg', title: 'Badrinath Temple' },
+    ],
+    testimonials: [
+      { name: 'Friends Group', quote: 'Chardham Yatra was a spiritual journey. The temples were beautiful and the journey was peaceful.' }
+    ]
+  },
+  {
+    id: 8,
+    description: "Experience the ultimate European journey covering iconic cities, breathtaking Alps, romantic canals, and historical landmarks across multiple countries.",
+    itinerary: [
+      { day: 1, title: 'Arrival in Paris', details: 'Arrive in Paris and check into your hotel. Enjoy an evening city illumination tour and a romantic Seine River Cruise.' },
+      { day: 2, title: 'Paris City Tour & Eiffel Tower', details: 'Guided city tour of Paris including Champs-Élysées, Arc de Triomphe, Louvre (photo stop), and visit to the 3rd level of the Eiffel Tower.' },
+      { day: 3, title: 'Versailles & Disneyland Paris', details: 'Guided tour of the magnificent Palace of Versailles followed by a full day of excitement and thrill at Disneyland Paris.' },
+      { day: 4, title: 'Paris → Brussels', details: 'Travel to Brussels. Visit Mini Europe, Grand Place, and see the iconic Manneken Pis statue.' },
+      { day: 5, title: 'Brussels → Amsterdam', details: 'Proceed to Amsterdam. Enjoy a canal cruise and visit traditional Dutch village and windmills (seasonal).' },
+      { day: 6, title: 'Amsterdam → Heidelberg', details: 'Drive to Germany. Walk through Heidelberg Altstadt and visit the Church of the Holy Spirit.' },
+      { day: 7, title: 'Black Forest & Rhine Falls', details: 'Drive through the Black Forest, witness a Cuckoo Clock demonstration, and enjoy a thrilling boat ride at Rhine Falls.' },
+      { day: 8, title: 'Interlaken & Jungfraujoch', details: 'Excursion to Jungfraujoch – Top of Europe. Enjoy snow activities and breathtaking Alpine views.' },
+      { day: 9, title: 'Mt. Titlis & Lucerne', details: 'Visit Mt. Titlis via the world’s first revolving cable car and walk on the Titlis Cliff Walk. Orientation tour of Lucerne.' },
+      { day: 10, title: 'Zurich & Vaduz', details: 'Visit Lindt Home of Chocolate in Zurich. Continue to Vaduz, Liechtenstein for a guided mini train ride.' },
+      { day: 11, title: 'Innsbruck & Swarovski Crystal Museum', details: 'Explore Innsbruck, see Golden Roof and Maria Theresien Strasse. Visit Swarovski Crystal Museum at Wattens.' },
+      { day: 12, title: 'Venice', details: 'Arrive in Venice. Visit St. Mark’s Square by private boat and enjoy a classic Venetian Gondola ride.' },
+      { day: 13, title: 'Rome & Vatican City – Departure', details: 'Orientation tour of Rome, visit Trevi Fountain, Vatican Museum, Sistine Chapel, and St. Peter’s Basilica. Departure with unforgettable memories.' },
+    ],
+    inclusions: [
+      'Accommodation in hotels',
+      'Daily breakfast & selected dinners',
+      'Coach transfers across Europe',
+      'Seine River Cruise',
+      'Disneyland Paris ticket',
+      'Jungfraujoch excursion',
+      'Mt. Titlis with Cliff Walk',
+      'Venice Gondola Ride',
+      'Gala Dinner in Switzerland'
+    ],
+    exclusions: [
+      'International airfare',
+      'Visa charges',
+      'Travel insurance',
+      'Lunches unless specified',
+      'Personal expenses',
+      'Anything not mentioned under inclusions'
+    ],
+    gallery: [
+      { url: '/Europe_image_1.jpg', title: 'Paris by Night' },
+      { url: '/Europe_image_2.jpg', title: 'Jungfraujoch' },
+      { url: '/Europe_image_3.jpg', title: 'Mt Titlis Cliff Walk' },
+      { url: '/Europe_image_4.jpg', title: 'Venice Gondola Ride' },
+    ],
+    testimonials: [
+      { name: 'Sharma Family', quote: 'A dream Europe vacation! Everything was perfectly planned and truly memorable.' }
+    ]
+  },
+  {
+    id: 9,
+    description: "A beautifully curated European holiday covering romantic Paris, charming canals, scenic Switzerland, and iconic landmarks in just 9 unforgettable days.",
+    itinerary: [
+      { day: 1, title: 'Arrival in Paris', details: 'Arrive in Paris and check into the hotel. Enjoy an evening city illumination tour.' },
+      { day: 2, title: 'Paris City Tour & Eiffel Tower', details: 'Guided city tour of Paris including Eiffel Tower (3rd level), Louvre (photo stop), and a romantic Seine River Cruise.' },
+      { day: 3, title: 'Versailles & Disneyland Paris', details: 'Guided tour of Versailles Palace followed by a full day of excitement at Disneyland Paris.' },
+      { day: 4, title: 'Paris → Brussels → Amsterdam', details: 'Travel to Brussels. Visit Mini Europe, Grand Place, and Manneken Pis. Continue to Amsterdam.' },
+      { day: 5, title: 'Amsterdam Sightseeing', details: 'Enjoy an Amsterdam Canal Cruise and visit a traditional Dutch village and windmills (seasonal).' },
+      { day: 6, title: 'Amsterdam → Black Forest → Rhine Falls', details: 'Drive through Germany’s Black Forest, witness a Cuckoo Clock demonstration, and enjoy Rhine Falls with boat ride.' },
+      { day: 7, title: 'Interlaken & Jungfraujoch', details: 'Full-day excursion to Jungfraujoch – Top of Europe. Experience snow-covered Alps and stunning views.' },
+      { day: 8, title: 'Mt. Titlis & Lucerne', details: 'Visit Mt. Titlis via rotating cable car, walk on Titlis Cliff Walk, followed by an orientation tour of Lucerne.' },
+      { day: 9, title: 'Zurich – Departure', details: 'Visit Lindt Home of Chocolate in Zurich. Departure with beautiful memories.' },
+    ],
+    inclusions: [
+      'Accommodation in hotels',
+      'Daily breakfast & selected dinners',
+      'Seine River Cruise',
+      'Disneyland Paris ticket',
+      'Jungfraujoch excursion',
+      'Mt. Titlis with Cliff Walk',
+      'Rhine Falls boat ride',
+      'Lindt Home of Chocolate visit'
+    ],
+    exclusions: [
+      'International airfare',
+      'Visa charges',
+      'Travel insurance',
+      'Lunches unless specified',
+      'Personal expenses',
+      'Anything not mentioned under inclusions'
+    ],
+    gallery: [
+      { url: '/Beauty of Europe_image_1.jpg', title: 'Eiffel Tower Paris' },
+      { url: '/Beauty of Europe_image_2.jpg', title: 'Amsterdam Canal' },
+      { url: '/Beauty of Europe_image_3.jpg', title: 'Rhine Falls' },
+      { url: '/Beauty of Europe_image_4.jpg', title: 'Mt Titlis' },
+    ],
+    testimonials: [
+      { name: 'Mehta Couple', quote: 'Perfect balance of sightseeing and leisure. Switzerland was breathtaking!' }
+    ]
+  }  
 ];
 
 

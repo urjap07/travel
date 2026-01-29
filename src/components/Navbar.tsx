@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from "react-router-dom";
-// MODIFIED: Imported motion and AnimatePresence
 import { motion, AnimatePresence, type Variants } from 'framer-motion';
 
 // --- NEW: Icons for mobile menu ---
@@ -55,22 +54,51 @@ const mobileMenuVariants: Variants = {
   },
 };
 
+// --- NEW: Animation variants for dropdown ---
+const dropdownVariants: Variants = {
+  hidden: { opacity: 0, y: -10, display: 'none' },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    display: 'block',
+    transition: { duration: 0.2, ease: "easeOut" } 
+  },
+  exit: { 
+    opacity: 0, 
+    y: -10, 
+    transition: { duration: 0.2, ease: "easeIn" },
+    transitionEnd: { display: 'none' }
+  }
+};
+
 
 export default function Navbar() {
- const { pathname } = useLocation();
-  // NEW: State to manage mobile menu visibility
- const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { pathname } = useLocation();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isPackagesDropdownOpen, setIsPackagesDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
- // Helper to style the active and hovered links
- const linkClass = (path: string, isMobile: boolean = false) => {
-    // MODIFIED: Added isMobile check for different styles
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsPackagesDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const linkClass = (path: string, isMobile: boolean = false) => {
     const baseClass = isMobile
-      ? "block w-full text-left px-4 py-3 text-lg" // Mobile styles
-      : "py-2 px-4 rounded-xl transition font-medium transform"; // Desktop styles
+      ? "block w-full text-left px-4 py-3 text-lg" 
+      : "py-2 px-4 rounded-xl transition font-medium transform"; 
 
     const activeClass = isMobile
       ? "bg-secondary text-white"
-      : "bg-[#FF7A59] text-white shadow"; // Coral for active
+      : "bg-[#FF7A59] text-white shadow"; 
 
     const inactiveClass = isMobile
       ? "text-gray-700 hover:bg-accent/50"
@@ -83,36 +111,70 @@ export default function Navbar() {
     return `${baseClass} ${pathname === path ? activeClass : inactiveClass}`;
   };
 
+  const handleDropdownToggle = () => {
+    setIsPackagesDropdownOpen(!isPackagesDropdownOpen);
+  };
+
   return (
     <nav className="bg-gradient-to-r from-[#F8FDFD] via-[#E0F7FA] to-[#B2EBF2] shadow-md px-4 sm:px-6 py-3 flex items-center justify-between sticky top-0 z-50 relative">
-      {/* MODIFIED: Replaced image with video */}
-     <div className="flex items-center">
-      <Link to="/" className="flex items-center">
-          {/* MODIFIED: Replaced <img> with <video> */}
-          <video 
-            // IMPORTANT: Replace this with the path to your video file
-            src="/Travel Logo Animation.mp4" 
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="h-16 w-auto" // Kept the same size as the logo
-          >
-            Your browser does not support the video tag.
-          </video>
-      </Link>
+      <div className="flex items-center">
+        <Link to="/" className="flex items-center">
+          <img 
+            src="/TheTravelGroup_Logo.jpg" 
+            alt="The Travel Group Logo" 
+            className="h-16 w-auto" 
+            onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://placehold.co/150x50/eeeeee/333333?text=Logo'; (e.currentTarget as HTMLImageElement).onerror = null; }}
+          />
+        </Link>
       </div>
 
-     {/* --- Desktop Menu --- */}
-      <div className="hidden md:flex space-x-2">
-      <Link to="/" className={linkClass("/")}>Home</Link>
-      <Link to="/packages" className={linkClass("/packages")}>Packages</Link>
-      <Link to="/enquiry" className={linkClass("/enquiry")}>Enquiry</Link>
-      <Link to="/about" className={linkClass("/about")}>About</Link>
+      {/* --- Desktop Menu --- */}
+      <div className="hidden md:flex space-x-2 items-center">
+        <Link to="/" className={linkClass("/")}>Home</Link>
+        
+        {/* Packages Dropdown */}
+        <div className="relative" ref={dropdownRef}>
+          <button 
+            onClick={handleDropdownToggle}
+            className={`${linkClass("/packages").replace("bg-[#FF7A59] text-white shadow", "")} flex items-center gap-1 focus:outline-none`}
+          >
+            Packages
+          </button>
+          <AnimatePresence>
+            {isPackagesDropdownOpen && (
+              <motion.div
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                variants={dropdownVariants}
+                className="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-xl overflow-hidden z-50 border border-gray-100 p-2"
+              >
+                <div className="flex flex-col gap-2">
+                  <Link 
+                    to="/group-packages" 
+                    className="block px-4 py-3 rounded-lg bg-gray-50 hover:bg-gradient-to-r hover:from-[#FF7A59] hover:via-[#F4C542] hover:to-[#00AFAA] hover:text-white transition-all text-left font-medium text-gray-800 shadow-sm"
+                    onClick={() => setIsPackagesDropdownOpen(false)}
+                  >
+                    Group / Family Packages
+                  </Link>
+                  <Link 
+                    to="/packages" 
+                    className="block px-4 py-3 rounded-lg bg-gray-50 hover:bg-gradient-to-r hover:from-[#FF7A59] hover:via-[#F4C542] hover:to-[#00AFAA] hover:text-white transition-all text-left font-medium text-gray-800 shadow-sm"
+                    onClick={() => setIsPackagesDropdownOpen(false)}
+                  >
+                    Popular Packages
+                  </Link>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        <Link to="/enquiry" className={linkClass("/enquiry")}>Enquiry</Link>
+        <Link to="/about" className={linkClass("/about")}>About</Link>
       </div>
 
       {/* --- Mobile Menu Button --- */}
-      {/* NEW: Show on medium and below */}
       <div className="md:hidden">
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -135,7 +197,26 @@ export default function Navbar() {
           >
             <div className="flex flex-col py-2">
               <Link to="/" className={linkClass("/", true)} onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
-              <Link to="/packages" className={linkClass("/packages", true)} onClick={() => setIsMobileMenuOpen(false)}>Packages</Link>
+              
+              {/* Mobile Packages Dropdown */}
+              <div className="border-l-4 border-accent ml-4 pl-0 mt-2 mb-2">
+                  <span className="block px-4 py-2 text-sm font-bold text-gray-500 uppercase tracking-wider mb-1">Packages</span>
+                  <Link 
+                    to="/group-packages" 
+                    className="block px-4 py-3 mx-2 rounded-lg bg-gray-50 text-gray-800 font-medium hover:bg-accent/30 transition-colors mb-2" 
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Group / Family Packages
+                  </Link>
+                  <Link 
+                    to="/packages" 
+                    className="block px-4 py-3 mx-2 rounded-lg bg-gray-50 text-gray-800 font-medium hover:bg-accent/30 transition-colors" 
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Popular Packages
+                  </Link>
+              </div>
+
               <Link to="/enquiry" className={linkClass("/enquiry", true)} onClick={() => setIsMobileMenuOpen(false)}>Enquiry</Link>
               <Link to="/about" className={linkClass("/about", true)} onClick={() => setIsMobileMenuOpen(false)}>About</Link>
             </div>
@@ -143,5 +224,5 @@ export default function Navbar() {
         )}
       </AnimatePresence>
     </nav>
- );
+  );
 }
