@@ -58,7 +58,6 @@ export default function Navbar() {
       ? "block w-full text-left px-4 py-3 text-lg rounded-xl" 
       : "py-2 px-4 rounded-xl transition font-medium transform"; 
 
-    // Custom logic: "Packages" button is active if on /packages OR /group-packages
     const isPackagesActive = path === "/packages" && (pathname === "/packages" || pathname === "/group-packages");
     const isActive = pathname === path || isPackagesActive;
 
@@ -85,7 +84,7 @@ export default function Navbar() {
       <div className="hidden md:flex space-x-2 items-center">
         <Link to="/" className={linkClass("/")}>Home</Link>
         
-        {/* Packages Dropdown Trigger */}
+        {/* Packages Section: Manually Added Above Dropdown */}
         <div className="relative" ref={dropdownRef}>
           <button 
             type="button"
@@ -102,19 +101,19 @@ export default function Navbar() {
                 animate="visible" 
                 exit="exit" 
                 variants={dropdownVariants} 
-                className="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-xl overflow-hidden z-[10000] border border-gray-100 p-2"
+                className="absolute top-full left-0 mt-2 w-72 bg-white rounded-3xl shadow-2xl overflow-hidden z-[10000] border border-gray-100 p-3"
               >
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-2">
                   <Link 
                     to="/group-packages" 
-                    className="block px-4 py-3 rounded-lg text-gray-800 font-medium hover:bg-gradient-to-r hover:from-[#FF7A59] hover:via-[#F4C542] hover:to-[#00AFAA] hover:text-white transition-all shadow-sm text-left"
+                    className="block px-6 py-4 rounded-2xl text-gray-800 font-bold hover:bg-[#FF7A59] hover:text-white transition-all shadow-sm text-sm text-left"
                     onClick={() => setIsPackagesDropdownOpen(false)}
                   >
                     Group / Family Packages
                   </Link>
                   <Link 
                     to="/packages" 
-                    className="block px-4 py-3 rounded-lg text-gray-800 font-medium hover:bg-gradient-to-r hover:from-[#FF7A59] hover:via-[#F4C542] hover:to-[#00AFAA] hover:text-white transition-all shadow-sm text-left"
+                    className="block px-6 py-4 rounded-2xl text-gray-800 font-bold hover:bg-[#FF7A59] hover:text-white transition-all shadow-sm text-sm text-left"
                     onClick={() => setIsPackagesDropdownOpen(false)}
                   >
                     Popular Packages
@@ -144,12 +143,16 @@ export default function Navbar() {
             <div className="flex flex-col py-2 px-4">
               <Link to="/" className={linkClass("/", true)} onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
               
+              <div className="mt-4 mb-1">
+                <span className="text-xl font-bold text-[#1A1A1A] px-4">Packages</span>
+              </div>
+
               <div className="bg-gray-50 border-y border-gray-100 py-3 my-2 rounded-xl">
                   <span className="block px-4 py-1 text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Explore Packages</span>
-                  <Link to="/group-packages" className="block px-4 py-3 text-gray-700 font-medium hover:text-[#FF7A59]" onClick={() => setIsMobileMenuOpen(false)}>
+                  <Link to="/group-packages" className="block px-6 py-3 text-gray-700 font-bold hover:text-[#FF7A59]" onClick={() => setIsMobileMenuOpen(false)}>
                     Group / Family Packages
                   </Link>
-                  <Link to="/packages" className="block px-4 py-3 text-gray-700 font-medium hover:text-[#FF7A59]" onClick={() => setIsMobileMenuOpen(false)}>
+                  <Link to="/packages" className="block px-6 py-3 text-gray-700 font-bold hover:text-[#FF7A59]" onClick={() => setIsMobileMenuOpen(false)}>
                     Popular Packages
                   </Link>
               </div>
