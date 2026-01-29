@@ -84,7 +84,6 @@ export default function Navbar() {
       <div className="hidden md:flex space-x-2 items-center">
         <Link to="/" className={linkClass("/")}>Home</Link>
         
-        {/* Packages Section: Manually Added Above Dropdown */}
         <div className="relative" ref={dropdownRef}>
           <button 
             type="button"
@@ -101,11 +100,12 @@ export default function Navbar() {
                 animate="visible" 
                 exit="exit" 
                 variants={dropdownVariants} 
-                className="absolute top-full left-0 mt-2 w-72 bg-white rounded-3xl shadow-2xl overflow-hidden z-[10000] border border-gray-100 p-3"
+                className="absolute top-full left-0 mt-2 w-72 bg-white rounded-3xl shadow-2xl z-[10000] border border-gray-100 p-2"
               >
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-1">
                   <Link 
                     to="/group-packages" 
+                    // FIXED: Explicitly set hover:bg-[#FF7A59] for the orange color
                     className="block px-6 py-4 rounded-2xl text-gray-800 font-bold hover:bg-[#FF7A59] hover:text-white transition-all shadow-sm text-sm text-left"
                     onClick={() => setIsPackagesDropdownOpen(false)}
                   >
@@ -113,6 +113,7 @@ export default function Navbar() {
                   </Link>
                   <Link 
                     to="/packages" 
+                    // FIXED: Explicitly set hover:bg-[#FF7A59] for the orange color
                     className="block px-6 py-4 rounded-2xl text-gray-800 font-bold hover:bg-[#FF7A59] hover:text-white transition-all shadow-sm text-sm text-left"
                     onClick={() => setIsPackagesDropdownOpen(false)}
                   >
@@ -131,7 +132,7 @@ export default function Navbar() {
 
       {/* --- Mobile Menu Button --- */}
       <div className="md:hidden">
-        <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-text p-2 rounded-md hover:bg-accent" aria-label="Toggle menu">
+        <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-[#1A1A1A] p-2 rounded-md hover:bg-gray-100" aria-label="Toggle menu">
           {isMobileMenuOpen ? <XIcon /> : <MenuIcon />}
         </button>
       </div>
