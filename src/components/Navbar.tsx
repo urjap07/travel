@@ -47,7 +47,7 @@ export default function Navbar() {
     const baseClass = isMobile ? "block w-full text-left px-4 py-3 text-lg" : "py-2 px-4 rounded-xl transition font-medium transform"; 
     const activeClass = isMobile ? "bg-secondary text-white" : "bg-[#FF7A59] text-white shadow"; 
     
-    // Highlight "Packages" if on any package-related sub-route
+    // Logic to highlight "Packages" if on any package-related sub-route
     const isPackagesActive = path === "/packages" && (pathname === "/packages" || pathname === "/group-packages");
     
     const inactiveClass = isMobile 
@@ -72,9 +72,14 @@ export default function Navbar() {
         {/* Packages Dropdown Trigger */}
         <div className="relative" ref={dropdownRef}>
           <button 
+            type="button"
             onClick={() => setIsPackagesDropdownOpen(!isPackagesDropdownOpen)}
-            // Removed "gap-1" and icon SVG to keep it text-only
-            className={`${linkClass("/packages").replace("shadow", "")} flex items-center focus:outline-none`}
+            // REFINED: Removed .replace() logic to prevent rendering bugs
+            className={`py-2 px-4 rounded-xl transition font-medium transform flex items-center focus:outline-none ${
+              (pathname === "/packages" || pathname === "/group-packages")
+              ? "bg-[#FF7A59] text-white shadow"
+              : "text-[#1A1A1A] hover:text-white hover:bg-gradient-to-r hover:from-[#FF7A59] hover:via-[#F4C542] hover:to-[#00AFAA] hover:shadow-md hover:-translate-y-0.5"
+            }`}
           >
             Packages
           </button>
@@ -113,7 +118,7 @@ export default function Navbar() {
 
       {/* --- Mobile Menu Button --- */}
       <div className="md:hidden">
-        <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-text p-2 rounded-md hover:bg-accent">
+        <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-text p-2 rounded-md hover:bg-accent" aria-label="Toggle menu">
           {isMobileMenuOpen ? <XIcon /> : <MenuIcon />}
         </button>
       </div>
