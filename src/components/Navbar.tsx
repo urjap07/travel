@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence, type Variants } from 'framer-motion';
 
 // --- Icons ---
@@ -15,30 +15,25 @@ const XIcon = () => (
   </svg>
 );
 
-// --- Animation variants ---
-const mobileMenuVariants: Variants = {
-  hidden: { opacity: 0, y: -20, transition: { duration: 0.2, ease: "easeOut" } },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeIn" } },
-};
-
 const dropdownVariants: Variants = {
   hidden: { opacity: 0, y: -10, display: 'none' },
   visible: { 
     opacity: 1, 
     y: 0, 
     display: 'block', 
-    transition: { duration: 0.2, ease: "easeOut" } 
+    transition: { duration: 0.8, ease: "easeOut" } 
   },
   exit: { 
     opacity: 0, 
     y: -10, 
-    transition: { duration: 0.2, ease: "easeIn" }, 
+    transition: { duration: 0.8, ease: "easeIn" }, 
     transitionEnd: { display: 'none' } 
   }
 };
 
 export default function Navbar() {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isPackagesDropdownOpen, setIsPackagesDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -61,12 +56,9 @@ export default function Navbar() {
     const isPackagesActive = path === "/packages" && (pathname === "/packages" || pathname === "/group-packages");
     const isActive = pathname === path || isPackagesActive;
 
-    const activeClass = isMobile
-      ? "bg-secondary text-white"
-      : "bg-[#FF7A59] text-white shadow"; 
-
+    const activeClass = "bg-[#FF7A59] text-white shadow"; 
     const inactiveClass = isMobile
-      ? "text-gray-700 hover:bg-accent/50"
+      ? "text-gray-700 hover:bg-gray-100"
       : "text-[#1A1A1A] border border-transparent hover:text-white hover:shadow-md hover:-translate-y-0.5 hover:bg-gradient-to-r hover:from-[#FF7A59] hover:via-[#F4C542] hover:to-[#00AFAA]";
 
     return `${baseClass} ${isActive ? activeClass : inactiveClass}`;
@@ -87,8 +79,17 @@ export default function Navbar() {
         <div className="relative" ref={dropdownRef}>
           <button 
             type="button"
-            onClick={() => setIsPackagesDropdownOpen(!isPackagesDropdownOpen)}
             className={linkClass("/packages")}
+            onClick={() => {
+              // Toggle the dropdown instantly for visual feedback
+              setIsPackagesDropdownOpen(!isPackagesDropdownOpen);
+              
+              // Wait 1 second so the orange hover/active color is seen
+              setTimeout(() => {
+                navigate("/packages");
+                setIsPackagesDropdownOpen(false);
+              }, 1000); 
+            }}
           >
             Packages
           </button>
@@ -96,30 +97,27 @@ export default function Navbar() {
           <AnimatePresence>
             {isPackagesDropdownOpen && (
               <motion.div 
-                initial="hidden" 
-                animate="visible" 
-                exit="exit" 
-                variants={dropdownVariants} 
-                // REMOVED: overflow-hidden to ensure hover backgrounds are fully visible
+                initial="hidden" animate="visible" exit="exit" variants={dropdownVariants} 
                 className="absolute top-full left-0 mt-3 w-72 bg-white rounded-3xl shadow-2xl z-[10000] border border-gray-100 p-2"
               >
                 <div className="flex flex-col gap-1.5">
-                  <Link 
-                    to="/group-packages" 
-                    // STYLED: Explicit orange hover that stands out against the white background
-                    className="block px-5 py-4 rounded-2xl text-gray-800 font-bold hover:bg-[#FF7A59] hover:text-white transition-all shadow-sm text-sm text-left"
-                    onClick={() => setIsPackagesDropdownOpen(false)}
+                  <button 
+                    onClick={() => {
+                      // Navigate to sub-packages with same 1s delay logic if preferred
+                      setTimeout(() => { navigate("/group-packages"); setIsPackagesDropdownOpen(false); }, 1000);
+                    }}
+                    className="block px-5 py-4 rounded-2xl text-gray-800 font-bold hover:bg-[#FF7A59] hover:text-white transition-all text-sm text-left w-full"
                   >
                     Group / Family Packages
-                  </Link>
-                  <Link 
-                    to="/packages" 
-                    // STYLED: Explicit orange hover
-                    className="block px-5 py-4 rounded-2xl text-gray-800 font-bold hover:bg-[#FF7A59] hover:text-white transition-all shadow-sm text-sm text-left"
-                    onClick={() => setIsPackagesDropdownOpen(false)}
+                  </button>
+                  <button 
+                    onClick={() => {
+                      setTimeout(() => { navigate("/packages"); setIsPackagesDropdownOpen(false); }, 1000);
+                    }}
+                    className="block px-5 py-4 rounded-2xl text-gray-800 font-bold hover:bg-[#FF7A59] hover:text-white transition-all text-sm text-left w-full"
                   >
                     Popular Packages
-                  </Link>
+                  </button>
                 </div>
               </motion.div>
             )}
@@ -133,39 +131,10 @@ export default function Navbar() {
 
       {/* --- Mobile Menu Button --- */}
       <div className="md:hidden">
-        <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-[#1A1A1A] p-2 rounded-md hover:bg-gray-100" aria-label="Toggle menu">
+        <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-[#1A1A1A] p-2 rounded-md hover:bg-gray-100">
           {isMobileMenuOpen ? <XIcon /> : <MenuIcon />}
         </button>
       </div>
-
-      {/* --- Mobile Menu Dropdown --- */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div className="absolute top-full left-0 right-0 bg-white shadow-lg md:hidden z-[9999]" variants={mobileMenuVariants} initial="hidden" animate="visible" exit="hidden">
-            <div className="flex flex-col py-2 px-4">
-              <Link to="/" className={linkClass("/", true)} onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
-              
-              <div className="mt-4 mb-1">
-                <span className="text-xl font-bold text-[#1A1A1A] px-4">Packages</span>
-              </div>
-
-              <div className="bg-gray-50 border-y border-gray-100 py-3 my-2 rounded-xl">
-                  <span className="block px-4 py-1 text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Explore Packages</span>
-                  <Link to="/group-packages" className="block px-6 py-3 text-gray-700 font-bold hover:text-[#FF7A59]" onClick={() => setIsMobileMenuOpen(false)}>
-                    Group / Family Packages
-                  </Link>
-                  <Link to="/packages" className="block px-6 py-3 text-gray-700 font-bold hover:text-[#FF7A59]" onClick={() => setIsMobileMenuOpen(false)}>
-                    Popular Packages
-                  </Link>
-              </div>
-
-              <Link to="/gallery" className={linkClass("/gallery", true)} onClick={() => setIsMobileMenuOpen(false)}>Gallery</Link>
-              <Link to="/enquiry" className={linkClass("/enquiry", true)} onClick={() => setIsMobileMenuOpen(false)}>Enquiry</Link>
-              <Link to="/about" className={linkClass("/about", true)} onClick={() => setIsMobileMenuOpen(false)}>About</Link>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </nav>
   );
 }
