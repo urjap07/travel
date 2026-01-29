@@ -46,9 +46,15 @@ export default function Navbar() {
   const linkClass = (path: string, isMobile: boolean = false) => {
     const baseClass = isMobile ? "block w-full text-left px-4 py-3 text-lg" : "py-2 px-4 rounded-xl transition font-medium transform"; 
     const activeClass = isMobile ? "bg-secondary text-white" : "bg-[#FF7A59] text-white shadow"; 
-    const inactiveClass = isMobile ? "text-gray-700 hover:bg-accent/50" : "text-[#1A1A1A] border border-transparent hover:text-white hover:shadow-md hover:-translate-y-0.5 hover:bg-gradient-to-r hover:from-[#FF7A59] hover:via-[#F4C542] hover:to-[#00AFAA]";
+    
+    // Highlight "Packages" if on any package-related sub-route
+    const isPackagesActive = path === "/packages" && (pathname === "/packages" || pathname === "/group-packages");
+    
+    const inactiveClass = isMobile 
+      ? "text-gray-700 hover:bg-accent/50" 
+      : "text-[#1A1A1A] border border-transparent hover:text-white hover:shadow-md hover:-translate-y-0.5 hover:bg-gradient-to-r hover:from-[#FF7A59] hover:via-[#F4C542] hover:to-[#00AFAA]";
 
-    return `${baseClass} ${pathname === path ? activeClass : inactiveClass}`;
+    return `${baseClass} ${pathname === path || isPackagesActive ? activeClass : inactiveClass}`;
   };
 
   return (
@@ -63,21 +69,35 @@ export default function Navbar() {
       <div className="hidden md:flex space-x-2 items-center">
         <Link to="/" className={linkClass("/")}>Home</Link>
         
+        {/* Packages Dropdown Trigger */}
         <div className="relative" ref={dropdownRef}>
           <button 
             onClick={() => setIsPackagesDropdownOpen(!isPackagesDropdownOpen)}
-            className={`${linkClass("/packages").replace("bg-[#FF7A59] text-white shadow", "")} flex items-center gap-1 focus:outline-none`}
+            // Removed "gap-1" and icon SVG to keep it text-only
+            className={`${linkClass("/packages").replace("shadow", "")} flex items-center focus:outline-none`}
           >
             Packages
           </button>
+          
           <AnimatePresence>
             {isPackagesDropdownOpen && (
-              <motion.div initial="hidden" animate="visible" exit="exit" variants={dropdownVariants} className="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-xl overflow-hidden z-50 border border-gray-100 p-2">
-                <div className="flex flex-col gap-2">
-                  <Link to="/group-packages" className="block px-4 py-3 rounded-lg bg-gray-50 hover:bg-gradient-to-r hover:from-[#FF7A59] hover:via-[#F4C542] hover:to-[#00AFAA] hover:text-white transition-all text-left font-medium text-gray-800 shadow-sm" onClick={() => setIsPackagesDropdownOpen(false)}>
+              <motion.div 
+                initial="hidden" animate="visible" exit="exit" variants={dropdownVariants} 
+                className="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-xl overflow-hidden z-50 border border-gray-100 p-2"
+              >
+                <div className="flex flex-col gap-1">
+                  <Link 
+                    to="/group-packages" 
+                    className="block px-4 py-3 rounded-lg text-gray-800 font-medium hover:bg-gradient-to-r hover:from-[#FF7A59] hover:to-[#00AFAA] hover:text-white transition-all shadow-sm"
+                    onClick={() => setIsPackagesDropdownOpen(false)}
+                  >
                     Group / Family Packages
                   </Link>
-                  <Link to="/packages" className="block px-4 py-3 rounded-lg bg-gray-50 hover:bg-gradient-to-r hover:from-[#FF7A59] hover:via-[#F4C542] hover:to-[#00AFAA] hover:text-white transition-all text-left font-medium text-gray-800 shadow-sm" onClick={() => setIsPackagesDropdownOpen(false)}>
+                  <Link 
+                    to="/packages" 
+                    className="block px-4 py-3 rounded-lg text-gray-800 font-medium hover:bg-gradient-to-r hover:from-[#FF7A59] hover:to-[#00AFAA] hover:text-white transition-all shadow-sm"
+                    onClick={() => setIsPackagesDropdownOpen(false)}
+                  >
                     Popular Packages
                   </Link>
                 </div>
@@ -86,16 +106,14 @@ export default function Navbar() {
           </AnimatePresence>
         </div>
 
-        {/* --- NEW: Gallery Link --- */}
         <Link to="/gallery" className={linkClass("/gallery")}>Gallery</Link>
-        
         <Link to="/enquiry" className={linkClass("/enquiry")}>Enquiry</Link>
         <Link to="/about" className={linkClass("/about")}>About</Link>
       </div>
 
       {/* --- Mobile Menu Button --- */}
       <div className="md:hidden">
-        <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-text p-2 rounded-md hover:bg-accent" aria-label="Toggle menu">
+        <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-text p-2 rounded-md hover:bg-accent">
           {isMobileMenuOpen ? <XIcon /> : <MenuIcon />}
         </button>
       </div>
@@ -107,19 +125,17 @@ export default function Navbar() {
             <div className="flex flex-col py-2">
               <Link to="/" className={linkClass("/", true)} onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
               
-              <div className="border-l-4 border-accent ml-4 pl-0 mt-2 mb-2">
-                  <span className="block px-4 py-2 text-sm font-bold text-gray-500 uppercase tracking-wider mb-1">Packages</span>
-                  <Link to="/group-packages" className="block px-4 py-3 mx-2 rounded-lg bg-gray-50 text-gray-800 font-medium hover:bg-accent/30 transition-colors mb-2" onClick={() => setIsMobileMenuOpen(false)}>
+              <div className="bg-gray-50 border-y border-gray-100 py-2">
+                  <span className="block px-8 py-1 text-xs font-bold text-gray-400 uppercase tracking-widest">Explore Packages</span>
+                  <Link to="/group-packages" className="block px-8 py-3 text-gray-700 font-medium hover:text-[#00AFAA]" onClick={() => setIsMobileMenuOpen(false)}>
                     Group / Family Packages
                   </Link>
-                  <Link to="/packages" className="block px-4 py-3 mx-2 rounded-lg bg-gray-50 text-gray-800 font-medium hover:bg-accent/30 transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+                  <Link to="/packages" className="block px-8 py-3 text-gray-700 font-medium hover:text-[#00AFAA]" onClick={() => setIsMobileMenuOpen(false)}>
                     Popular Packages
                   </Link>
               </div>
 
-              {/* --- NEW: Mobile Gallery Link --- */}
               <Link to="/gallery" className={linkClass("/gallery", true)} onClick={() => setIsMobileMenuOpen(false)}>Gallery</Link>
-
               <Link to="/enquiry" className={linkClass("/enquiry", true)} onClick={() => setIsMobileMenuOpen(false)}>Enquiry</Link>
               <Link to="/about" className={linkClass("/about", true)} onClick={() => setIsMobileMenuOpen(false)}>About</Link>
             </div>
