@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import { Camera } from "lucide-react";
+import { Camera, Link } from "lucide-react";
 
-// --- DATA: Add your images here ---
+// --- DATA: 12 Image Slots ---
 const galleryImages = [
   { url: "/Gallery_image_1.jpeg" },
   { url: "/Gallery_image_2.jpeg" },
@@ -39,7 +39,7 @@ const Gallery = () => {
             transition={{ duration: 1 }}
             className="text-7xl md:text-9xl font-black text-gray-900 tracking-tighter mb-6"
           >
-            The <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00AFAA] to-[#FF7A59]">Gallery.</span>
+            The <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00AFAA] via-[#FF7A59] to-[#FFC107]">Gallery.</span>
           </motion.h1>
           
           <motion.p 
@@ -79,10 +79,12 @@ const Gallery = () => {
                   src={img.url}
                   alt={`Travel Gallery ${index + 1}`}
                   className="w-full h-auto object-cover transition-transform duration-1000 group-hover:scale-105"
+                  // Handling missing images gracefully
+                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://placehold.co/600x400/eeeeee/999999?text=Image+Coming+Soon'; }}
                 />
               </div>
 
-              {/* Minimalist Overlay - Text and Icon removed */}
+              {/* Minimalist Overlay - Pure aesthetic, no text/icons */}
               <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-all duration-500" />
             </motion.div>
           ))}
@@ -94,9 +96,9 @@ const Gallery = () => {
           whileInView={{ opacity: 1 }}
           className="mt-32 text-center"
         >
-          <a href="/enquiry" className="text-2xl font-black text-gray-900 hover:text-[#00AFAA] transition-colors underline decoration-[#FF7A59] decoration-4 underline-offset-8">
+          <Link to="/enquiry" className="text-2xl font-black text-gray-900 hover:text-[#00AFAA] transition-colors underline decoration-[#FF7A59] decoration-4 underline-offset-8">
             Begin Your Own Story
-          </a>
+          </Link>
         </motion.div>
       </div>
     </div>
