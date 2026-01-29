@@ -23,8 +23,18 @@ const mobileMenuVariants: Variants = {
 
 const dropdownVariants: Variants = {
   hidden: { opacity: 0, y: -10, display: 'none' },
-  visible: { opacity: 1, y: 0, display: 'block', transition: { duration: 0.2, ease: "easeOut" } },
-  exit: { opacity: 0, y: -10, transition: { duration: 0.2, ease: "easeIn" }, transitionEnd: { display: 'none' } }
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    display: 'block', 
+    transition: { duration: 0.2, ease: "easeOut" } 
+  },
+  exit: { 
+    opacity: 0, 
+    y: -10, 
+    transition: { duration: 0.2, ease: "easeIn" }, 
+    transitionEnd: { display: 'none' } 
+  }
 };
 
 export default function Navbar() {
@@ -44,21 +54,27 @@ export default function Navbar() {
   }, []);
 
   const linkClass = (path: string, isMobile: boolean = false) => {
-    const baseClass = isMobile ? "block w-full text-left px-4 py-3 text-lg" : "py-2 px-4 rounded-xl transition font-medium transform"; 
-    const activeClass = isMobile ? "bg-secondary text-white" : "bg-[#FF7A59] text-white shadow"; 
-    
-    // Logic to highlight "Packages" if on any package-related sub-route
+    const baseClass = isMobile 
+      ? "block w-full text-left px-4 py-3 text-lg rounded-xl" 
+      : "py-2 px-4 rounded-xl transition font-medium transform"; 
+
+    // Custom logic: "Packages" button is active if on /packages OR /group-packages
     const isPackagesActive = path === "/packages" && (pathname === "/packages" || pathname === "/group-packages");
-    
-    const inactiveClass = isMobile 
-      ? "text-gray-700 hover:bg-accent/50" 
+    const isActive = pathname === path || isPackagesActive;
+
+    const activeClass = isMobile
+      ? "bg-secondary text-white"
+      : "bg-[#FF7A59] text-white shadow"; 
+
+    const inactiveClass = isMobile
+      ? "text-gray-700 hover:bg-accent/50"
       : "text-[#1A1A1A] border border-transparent hover:text-white hover:shadow-md hover:-translate-y-0.5 hover:bg-gradient-to-r hover:from-[#FF7A59] hover:via-[#F4C542] hover:to-[#00AFAA]";
 
-    return `${baseClass} ${pathname === path || isPackagesActive ? activeClass : inactiveClass}`;
+    return `${baseClass} ${isActive ? activeClass : inactiveClass}`;
   };
 
   return (
-    <nav className="bg-gradient-to-r from-[#F8FDFD] via-[#E0F7FA] to-[#B2EBF2] shadow-md px-4 sm:px-6 py-3 flex items-center justify-between sticky top-0 z-50">
+    <nav className="bg-gradient-to-r from-[#F8FDFD] via-[#E0F7FA] to-[#B2EBF2] shadow-md px-4 sm:px-6 py-3 flex items-center justify-between sticky top-0 z-[9999]">
       <div className="flex items-center">
         <Link to="/" className="flex items-center">
           <img src="/TheTravelGroup_Logo.jpg" alt="The Travel Group Logo" className="h-16 w-auto" />
@@ -74,12 +90,7 @@ export default function Navbar() {
           <button 
             type="button"
             onClick={() => setIsPackagesDropdownOpen(!isPackagesDropdownOpen)}
-            // REFINED: Removed .replace() logic to prevent rendering bugs
-            className={`py-2 px-4 rounded-xl transition font-medium transform flex items-center focus:outline-none ${
-              (pathname === "/packages" || pathname === "/group-packages")
-              ? "bg-[#FF7A59] text-white shadow"
-              : "text-[#1A1A1A] hover:text-white hover:bg-gradient-to-r hover:from-[#FF7A59] hover:via-[#F4C542] hover:to-[#00AFAA] hover:shadow-md hover:-translate-y-0.5"
-            }`}
+            className={linkClass("/packages")}
           >
             Packages
           </button>
@@ -87,20 +98,23 @@ export default function Navbar() {
           <AnimatePresence>
             {isPackagesDropdownOpen && (
               <motion.div 
-                initial="hidden" animate="visible" exit="exit" variants={dropdownVariants} 
+                initial="hidden" 
+                animate="visible" 
+                exit="exit" 
+                variants={dropdownVariants} 
                 className="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-xl overflow-hidden z-50 border border-gray-100 p-2"
               >
                 <div className="flex flex-col gap-1">
                   <Link 
                     to="/group-packages" 
-                    className="block px-4 py-3 rounded-lg text-gray-800 font-medium hover:bg-gradient-to-r hover:from-[#FF7A59] hover:to-[#00AFAA] hover:text-white transition-all shadow-sm"
+                    className="block px-4 py-3 rounded-lg text-gray-800 font-medium hover:bg-gradient-to-r hover:from-[#FF7A59] hover:via-[#F4C542] hover:to-[#00AFAA] hover:text-white transition-all shadow-sm text-left"
                     onClick={() => setIsPackagesDropdownOpen(false)}
                   >
                     Group / Family Packages
                   </Link>
                   <Link 
                     to="/packages" 
-                    className="block px-4 py-3 rounded-lg text-gray-800 font-medium hover:bg-gradient-to-r hover:from-[#FF7A59] hover:to-[#00AFAA] hover:text-white transition-all shadow-sm"
+                    className="block px-4 py-3 rounded-lg text-gray-800 font-medium hover:bg-gradient-to-r hover:from-[#FF7A59] hover:via-[#F4C542] hover:to-[#00AFAA] hover:text-white transition-all shadow-sm text-left"
                     onClick={() => setIsPackagesDropdownOpen(false)}
                   >
                     Popular Packages
