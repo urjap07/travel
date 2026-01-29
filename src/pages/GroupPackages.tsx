@@ -1,5 +1,4 @@
 import { motion, useScroll, useSpring, useTransform, type Variants } from "framer-motion";
-import type { FC } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, CheckCircle, Timer, Globe, Plane, Map } from "lucide-react";
@@ -69,34 +68,28 @@ const FlipPackageCard = ({ id, title, image, duration, price, highlights }: Flip
 
   return (
     <div
-      className="relative w-full h-[420px] group [perspective:2000px]" 
+      className="relative w-full h-[420px] [perspective:2000px] cursor-pointer" 
       onMouseEnter={() => setIsFlipped(true)}
       onMouseLeave={() => setIsFlipped(false)}
+      onClick={() => setIsFlipped(!isFlipped)}
     >
-      <div
-        className={cn(
-          "relative w-full h-full",
-          "[transform-style:preserve-3d]",
-          "transition-all duration-700",
-          isFlipped ? "[transform:rotateY(180deg)]" : "[transform:rotateY(0deg)]"
-        )}
+      <motion.div
+        className="relative w-full h-full"
+        style={{ transformStyle: "preserve-3d" }}
+        initial={false}
+        animate={{ rotateY: isFlipped ? 180 : 0 }}
+        transition={{ duration: 0.7, ease: "easeInOut" }}
       >
+        {/* --- FRONT FACE --- */}
         <div
-          className={cn(
-            "absolute inset-0 w-full h-full",
-            "[backface-visibility:hidden] [transform:rotateY(0deg)]",
-            "rounded-xl overflow-hidden shadow-lg",
-            "bg-[#FFF6E0]", 
-            "flex flex-col",
-            "transition-all duration-700",
-            isFlipped ? "opacity-0" : "opacity-100"
-          )}
+          className="absolute inset-0 w-full h-full rounded-xl overflow-hidden shadow-lg bg-[#FFF6E0] flex flex-col"
+          style={{ backfaceVisibility: "hidden" }}
         >
           <div className="relative h-[60%] w-full">
             <img
               src={image}
               alt={title}
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              className="w-full h-full object-cover transition-transform duration-700"
             />
             <div className="absolute top-0 right-9 w-0.5 h-4 bg-black z-10"></div>
             <div className="absolute top-4 right-4 bg-[#FFC107] text-black font-bold px-3 py-1 rounded text-sm shadow-sm flex items-center gap-1 z-20">
@@ -108,48 +101,40 @@ const FlipPackageCard = ({ id, title, image, duration, price, highlights }: Flip
             <h3 className="text-xl font-bold text-gray-900 w-full">{title}</h3>
             <div className="w-full">
                <p className="text-2xl font-bold text-[#00AFAA] mb-2">{price}</p>
-               <div className="text-[#FF7A59] font-medium text-sm flex items-center gap-1 hover:translate-x-1 transition-transform cursor-pointer">
+               <div className="text-[#FF7A59] font-medium text-sm flex items-center gap-1">
                  View Details <ArrowRight className="w-4 h-4" />
                </div>
             </div>
           </div>
         </div>
 
+        {/* --- BACK FACE --- */}
         <div
-          className={cn(
-            "absolute inset-0 w-full h-full",
-            "[backface-visibility:hidden] [transform:rotateY(180deg)]",
-            "rounded-xl overflow-hidden shadow-xl",
-            "bg-teal-600 text-white p-6", 
-            "flex flex-col",
-            "transition-all duration-700",
-            !isFlipped ? "opacity-0" : "opacity-100"
-          )}
+          className="absolute inset-0 w-full h-full rounded-xl overflow-hidden shadow-xl bg-teal-600 text-white p-6 flex flex-col"
+          style={{ 
+            backfaceVisibility: "hidden", 
+            transform: "rotateY(180deg)" 
+          }}
         >
           <div className="flex-1">
             <h3 className="text-lg font-bold mb-2 border-b border-orange-500 pb-2">{title}</h3>
-            <p className="text-orange-200 text-xs uppercase tracking-wider font-semibold mb-4">
-              Highlights
-            </p>
+            <p className="text-orange-200 text-xs uppercase tracking-wider font-semibold mb-4">Highlights</p>
             <ul className="space-y-2">
               {highlights.map((item, index) => (
-                <li 
-                  key={index} 
-                  className="flex items-start gap-2 text-sm text-gray-100"
-                >
+                <li key={index} className="flex items-start gap-2 text-sm text-gray-100">
                   <CheckCircle className="w-4 h-4 text-[#FFC107] shrink-0 mt-0.5" />
                   <span className="leading-snug">{item}</span>
                 </li>
               ))}
             </ul>
           </div>
-          <Link to={`/package/${id}`} className="block w-full mt-2">
+          <Link to={`/package/${id}`} className="block w-full mt-2" onClick={(e) => e.stopPropagation()}>
             <button className="w-full bg-[#FFC107] hover:bg-yellow-500 text-black font-bold py-3 rounded-lg transition-all shadow-md active:scale-95 flex items-center justify-center gap-2">
               View Full Itinerary <ArrowRight className="w-4 h-4" />
             </button>
           </Link>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
@@ -167,8 +152,6 @@ const cardItemVariants: Variants = {
 
 const GroupPackages = () => {
   const { scrollY } = useScroll();
-  
-  // Parallax offsets for depth
   const y1 = useTransform(scrollY, [0, 500], [0, 200]);
   const y2 = useTransform(scrollY, [0, 500], [0, -150]);
 
@@ -178,8 +161,6 @@ const GroupPackages = () => {
 
       {/* --- CREATIVE HERO SECTION --- */}
       <section className="relative h-[80vh] flex items-center justify-center px-6 overflow-hidden bg-gradient-to-b from-[#00AFAA]/10 to-transparent">
-        
-        {/* Animated Background Mesh Blobs */}
         <div className="absolute inset-0 z-0">
           <motion.div 
             animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
@@ -193,7 +174,6 @@ const GroupPackages = () => {
           />
         </div>
 
-        {/* Floating Parallax Icons */}
         <motion.div style={{ y: y2 }} className="absolute top-20 left-[10%] text-[#00AFAA]/20 hidden md:block">
           <Globe size={140} />
         </motion.div>
@@ -208,7 +188,6 @@ const GroupPackages = () => {
           <Plane size={80} />
         </motion.div>
 
-        {/* Content Box */}
         <motion.div
           className="relative z-10 text-center"
           initial={{ opacity: 0, y: 30 }}
@@ -244,7 +223,6 @@ const GroupPackages = () => {
           </motion.div>
         </motion.div>
 
-        {/* Dynamic Curved Wave Transition */}
         <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
           <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="relative block w-full h-[80px] fill-[#F8FDFD]">
             <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5,73.84-4.36,147.54,16.88,218.2,35.26,69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z"></path>
@@ -252,7 +230,6 @@ const GroupPackages = () => {
         </div>
       </section>
 
-      {/* --- CARDS SECTION --- */}
       <div className="container mx-auto max-w-7xl pt-10 pb-24 px-6">
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"
