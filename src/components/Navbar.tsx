@@ -74,7 +74,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-gradient-to-r from-[#F8FDFD] via-[#E0F7FA] to-[#B2EBF2] shadow-md px-4 sm:px-6 py-3 flex items-center justify-between sticky top-0 z-[9999]">
+    <nav className="bg-gradient-to-r from-[#F8FDFD] via-[#E0F7FA] to-[#B2EBF2] shadow-md px-4 sm:px-12 py-3 flex items-center justify-between sticky top-0 z-[9999]">
       <div className="flex items-center">
         <Link to="/" className="flex items-center">
           <img src="/TheTravelGroup_Logo.jpg" alt="The Travel Group Logo" className="h-16 w-auto" />
@@ -102,7 +102,7 @@ export default function Navbar() {
                 animate="visible" 
                 exit="exit" 
                 variants={dropdownVariants} 
-                className="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-xl overflow-hidden z-50 border border-gray-100 p-2"
+                className="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-xl overflow-hidden z-[10000] border border-gray-100 p-2"
               >
                 <div className="flex flex-col gap-1">
                   <Link 
@@ -140,16 +140,16 @@ export default function Navbar() {
       {/* --- Mobile Menu Dropdown --- */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <motion.div className="absolute top-full left-0 right-0 bg-white shadow-lg md:hidden z-40" variants={mobileMenuVariants} initial="hidden" animate="visible" exit="hidden">
-            <div className="flex flex-col py-2">
+          <motion.div className="absolute top-full left-0 right-0 bg-white shadow-lg md:hidden z-[9999]" variants={mobileMenuVariants} initial="hidden" animate="visible" exit="hidden">
+            <div className="flex flex-col py-2 px-4">
               <Link to="/" className={linkClass("/", true)} onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
               
-              <div className="bg-gray-50 border-y border-gray-100 py-2">
-                  <span className="block px-8 py-1 text-xs font-bold text-gray-400 uppercase tracking-widest">Explore Packages</span>
-                  <Link to="/group-packages" className="block px-8 py-3 text-gray-700 font-medium hover:text-[#00AFAA]" onClick={() => setIsMobileMenuOpen(false)}>
+              <div className="bg-gray-50 border-y border-gray-100 py-3 my-2 rounded-xl">
+                  <span className="block px-4 py-1 text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Explore Packages</span>
+                  <Link to="/group-packages" className="block px-4 py-3 text-gray-700 font-medium hover:text-[#FF7A59]" onClick={() => setIsMobileMenuOpen(false)}>
                     Group / Family Packages
                   </Link>
-                  <Link to="/packages" className="block px-8 py-3 text-gray-700 font-medium hover:text-[#00AFAA]" onClick={() => setIsMobileMenuOpen(false)}>
+                  <Link to="/packages" className="block px-4 py-3 text-gray-700 font-medium hover:text-[#FF7A59]" onClick={() => setIsMobileMenuOpen(false)}>
                     Popular Packages
                   </Link>
               </div>
