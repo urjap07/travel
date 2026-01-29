@@ -100,21 +100,22 @@ export default function Navbar() {
                 animate="visible" 
                 exit="exit" 
                 variants={dropdownVariants} 
-                className="absolute top-full left-0 mt-2 w-72 bg-white rounded-3xl shadow-2xl z-[10000] border border-gray-100 p-2"
+                // REMOVED: overflow-hidden to ensure hover backgrounds are fully visible
+                className="absolute top-full left-0 mt-3 w-72 bg-white rounded-3xl shadow-2xl z-[10000] border border-gray-100 p-2"
               >
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-1.5">
                   <Link 
                     to="/group-packages" 
-                    // FIXED: Explicitly set hover:bg-[#FF7A59] for the orange color
-                    className="block px-6 py-4 rounded-2xl text-gray-800 font-bold hover:bg-[#FF7A59] hover:text-white transition-all shadow-sm text-sm text-left"
+                    // STYLED: Explicit orange hover that stands out against the white background
+                    className="block px-5 py-4 rounded-2xl text-gray-800 font-bold hover:bg-[#FF7A59] hover:text-white transition-all shadow-sm text-sm text-left"
                     onClick={() => setIsPackagesDropdownOpen(false)}
                   >
                     Group / Family Packages
                   </Link>
                   <Link 
                     to="/packages" 
-                    // FIXED: Explicitly set hover:bg-[#FF7A59] for the orange color
-                    className="block px-6 py-4 rounded-2xl text-gray-800 font-bold hover:bg-[#FF7A59] hover:text-white transition-all shadow-sm text-sm text-left"
+                    // STYLED: Explicit orange hover
+                    className="block px-5 py-4 rounded-2xl text-gray-800 font-bold hover:bg-[#FF7A59] hover:text-white transition-all shadow-sm text-sm text-left"
                     onClick={() => setIsPackagesDropdownOpen(false)}
                   >
                     Popular Packages
