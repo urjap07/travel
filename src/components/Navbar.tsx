@@ -74,7 +74,17 @@ export default function Navbar() {
     <nav className="bg-gradient-to-r from-[#F8FDFD] via-[#E0F7FA] to-[#B2EBF2] shadow-md px-4 sm:px-12 py-3 flex items-center justify-between sticky top-0 z-[9999]">
       <div className="flex items-center">
         <Link to="/" className="flex items-center">
-          <img src="/TheTravelGroup_Logo.jpg" alt="The Travel Group Logo" className="h-16 w-auto" />
+          {/* REPLACED LOGO WITH VIDEO ANIMATION */}
+          <video 
+            src="/Travel Logo Animation.mp4" 
+            autoPlay 
+            loop 
+            muted 
+            playsInline 
+            className="h-16 w-auto mix-blend-multiply" // Added mix-blend to help transparency on colored nav
+          >
+            Your browser does not support the video tag.
+          </video>
         </Link>
       </div>
 
@@ -138,7 +148,7 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* --- Mobile Menu Dropdown (THIS WAS MISSING) --- */}
+      {/* --- Mobile Menu Dropdown --- */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div 
