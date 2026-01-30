@@ -156,9 +156,6 @@ export default function Navbar() {
     </nav>
   );
 }
-
-      {/* --- Rest of your Desktop and Mobile Menu code --- */}
-      {/* (Ensure the rest of the file remains as per your previous setup) */}
     </nav>
   );
 }
