@@ -1,39 +1,79 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { motion, AnimatePresence, type Variants } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useMotionValueEvent, type Variants } from 'framer-motion';
 
-// --- Icons ---
-const MenuIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
-    <line x1="3" x2="21" y1="12" y2="12" /><line x1="3" x2="21" y1="6" y2="6" /><line x1="3" x2="21" y1="18" y2="18" />
-  </svg>
-);
+// ... (keep your existing Icon and Variants code)
 
-const XIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
-    <line x1="18" x2="6" y1="6" y2="18" /><line x1="6" x2="18" y1="6" y2="18" />
-  </svg>
-);
+export default function Navbar() {
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isPackagesDropdownOpen, setIsPackagesDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-// --- Animation variants ---
-const mobileMenuVariants: Variants = {
-  hidden: { opacity: 0, y: -20, transition: { duration: 0.2, ease: "easeOut" } },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeIn" } },
-};
+  // --- Scroll Logic for Rolling Animation ---
+  const [isScrolled, setIsScrolled] = useState(false);
+  const { scrollY } = useScroll();
 
-const dropdownVariants: Variants = {
-  hidden: { opacity: 0, y: -10, display: 'none' },
-  visible: { 
-    opacity: 1, 
-    y: 0, 
-    display: 'block', 
-    transition: { duration: 0, ease: "easeOut" } 
-  },
-  exit: { 
-    opacity: 0, 
-    y: -10, 
-    transition: { duration: 0, ease: "easeIn" }, 
-    transitionEnd: { display: 'none' } 
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    // Triggers the "roll" after 60px of scrolling
+    if (latest > 60) {
+      setIsScrolled(true);
+    } else {
+      setIsScrolled(false);
+    }
+  });
+
+  // ... (keep your existing linkClass and handleClickOutside)
+
+  return (
+    <nav className={`fixed top-0 left-0 right-0 z-[9999] px-4 sm:px-12 py-3 flex items-center justify-between transition-all duration-700 ${
+      isScrolled 
+        ? "bg-gradient-to-r from-[#F8FDFD] via-[#E0F7FA] to-[#B2EBF2] shadow-md" 
+        : "bg-transparent shadow-none"
+    }`}>
+      
+      <div className="flex items-center">
+        <Link to="/" className="relative group overflow-hidden rounded-lg">
+          {/* THE ROLLING LOGO CONTAINER */}
+          <div className="relative h-16 w-auto flex items-center justify-center">
+            
+            {/* 1. INITIAL STATE: Black Background Layer */}
+            <motion.div
+              className="absolute inset-0 bg-black z-10"
+              animate={{ 
+                x: isScrolled ? "100%" : "0%" 
+              }}
+              transition={{ duration: 0.8, ease: [0.45, 0, 0.55, 1] }}
+            />
+
+            {/* 2. ORIGINAL STATE: White Background Layer (revealed by the roll) */}
+            <div className="bg-white p-1 rounded-lg">
+              <img 
+                src="/TheTravelGroup_Logo.jpg" 
+                alt="The Travel Group Logo" 
+                className="h-14 w-auto block" 
+              />
+            </div>
+
+            {/* 3. OPTIONAL: A "shimmer" line that moves with the roll */}
+            <motion.div
+              className="absolute top-0 bottom-0 w-1 bg-[#FF7A59] z-20"
+              animate={{ 
+                left: isScrolled ? "100%" : "0%",
+                opacity: isScrolled ? 0 : 1
+              }}
+              transition={{ duration: 0.8, ease: [0.45, 0, 0.55, 1] }}
+            />
+          </div>
+        </Link>
+      </div>
+
+      {/* --- Rest of your Desktop and Mobile Menu code --- */}
+      {/* (Ensure the rest of the file remains as per your previous setup) */}
+    </nav>
+  );
+}
   }
 };
 
